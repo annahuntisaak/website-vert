@@ -8,18 +8,14 @@ import hand from '../../assets/hand.jpeg';
 import still from '../../assets/still.jpeg';
 import maine from '../../assets/maine.jpg';
 
+// Each piece has a src and a lines array — one string per caption line.
 const rows = [
-  [{ src: les,      title: 'cotton linter, acrylic' }],
-  [{ src: line,     title: 'gouache, colored pencil, chalk pastel' }],
-  [{ src: driveway, title: 'chalk pastel' }, { src: pools, title: 'lithographic ink' }],
-  [{ src: hand,     title: 'colored pencil, gouache' }],
-  [{ src: still,    title: 'chalk pastel' }, {src: maine, title: 'linocuts, acrylic' }],
+  [{ src: les,      lines: ['cotton linter, acrylic', '21.5 x 27.5'] }],
+  [{ src: line,     lines: ['gouache, colored pencil, chalk pastel'] }],
+  [{ src: driveway, lines: ['chalk pastel', '6.5 x 6.5'] }, { src: pools, lines: ['lithographic ink', '8 x 6'] }],
+  [{ src: hand,     lines: ['colored pencil, gouache'] }],
+  [{ src: still,    lines: ['chalk pastel'] }, { src: maine, lines: ['linocuts, acrylic'] }],
 ];
-
-const Intro = styled.p`
-  text-align: center;
-  margin-bottom: 2rem;
-`;
 
 const Gallery = styled.div`
   display: flex;
@@ -28,8 +24,6 @@ const Gallery = styled.div`
   width: 100%;
 `;
 
-// Each row is the same fixed width and centered. flex: ratio sizes the cell
-// proportionally so multi-image rows share one height without distortion.
 const Row = styled.div`
   display: flex;
   gap: 16px;
@@ -46,7 +40,7 @@ const Cell = styled.div`
     opacity: 0.25;
   }
 
-  &:hover span {
+  &:hover div {
     opacity: 1;
   }
 `;
@@ -58,7 +52,7 @@ const Img = styled.img`
   transition: opacity 0.3s ease;
 `;
 
-const HoverLabel = styled.span`
+const HoverLabel = styled.div`
   position: absolute;
   top: 50%;
   left: 50%;
@@ -68,7 +62,12 @@ const HoverLabel = styled.span`
   font-size: 0.75rem;
   text-align: center;
   pointer-events: none;
-  white-space: nowrap;
+  width: 90%;
+`;
+
+const CaptionLine = styled.span`
+  display: block;
+  line-height: 1.6;
 `;
 
 const DEFAULT_RATIO = 1.5;
@@ -86,34 +85,30 @@ const TraditionalArtBlock = () => {
   }, []);
 
   return (
-    <div>
-      {/* <Intro>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad
-        minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-        ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-        voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-      </Intro> */}
-      <Gallery>
-        {rows.map((row, rowIndex) => {
-          const total = row.reduce((sum, p) => sum + ratios[p.src], 0);
-          const scale = total < 1 ? 1 / total : 1;
-          return (
-            <Row key={rowIndex}>
-              {row.map((piece) => (
-                <Cell key={piece.src} $ratio={ratios[piece.src] * scale}>
-                  <Img
-                    src={piece.src}
-                    alt={piece.title}
-                    onLoad={(e) => handleLoad(e, piece.src)}
-                  />
-                  <HoverLabel>{piece.title}</HoverLabel>
-                </Cell>
-              ))}
-            </Row>
-          );
-        })}
-      </Gallery>
-    </div>
+    <Gallery>
+      {rows.map((row, rowIndex) => {
+        const total = row.reduce((sum, p) => sum + ratios[p.src], 0);
+        const scale = total < 1 ? 1 / total : 1;
+        return (
+          <Row key={rowIndex}>
+            {row.map((piece) => (
+              <Cell key={piece.src} $ratio={ratios[piece.src] * scale}>
+                <Img
+                  src={piece.src}
+                  alt={piece.lines.join(', ')}
+                  onLoad={(e) => handleLoad(e, piece.src)}
+                />
+                <HoverLabel>
+                  {piece.lines.map((line, i) => (
+                    <CaptionLine key={i}>{line}</CaptionLine>
+                  ))}
+                </HoverLabel>
+              </Cell>
+            ))}
+          </Row>
+        );
+      })}
+    </Gallery>
   );
 };
 

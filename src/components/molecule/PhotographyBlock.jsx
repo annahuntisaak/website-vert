@@ -1,60 +1,47 @@
 import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
-import annex from '../../assets/annex.jpg';
 import beach from '../../assets/beach.jpg';
-import bench from '../../assets/bench.jpg';
-import bikes from '../../assets/bikes.jpg';
+import bottle from '../../assets/bottle.jpg';
 import cat from '../../assets/cat.jpg';
-import dinner from '../../assets/dinner.jpg';
+import chair from '../../assets/chair.jpg';
 import golden from '../../assets/golden.jpg';
 import grammy from '../../assets/grammy.jpg';
-import hotdog from '../../assets/hotdog.jpg';
 import house from '../../assets/house.jpg';
 import kitchen from '../../assets/kitchen.jpg';
-import leaves from '../../assets/leaves.jpg';
-import lightpost from '../../assets/lightpost.jpg';
 import mountain from '../../assets/mountain.jpg';
 import mtl_night from '../../assets/mtl_night.jpg';
 import museum_dark from '../../assets/museum_dark.jpg';
 import museum_light from '../../assets/museum_light.jpg';
-import nc_dorm from '../../assets/nc_dorm.jpg';
 import noah_stairs from '../../assets/noah_stairs.jpg';
-import office from '../../assets/office.jpg';
 import one_tree from '../../assets/one_tree.jpg';
+import plants from '../../assets/plants.jpg';
 import pond from '../../assets/pond.jpg';
-import rocks from '../../assets/rocks.jpg';
 import street from '../../assets/street.jpg';
 import sunset from '../../assets/sunset.jpg';
 import tea from '../../assets/tea.jpg';
 import tree_water from '../../assets/tree_water.jpg';
 import trees from '../../assets/trees.jpg';
-import trinkets from '../../assets/trinkets.jpg';
+import trinity from '../../assets/trinity.jpg';
 import village from '../../assets/village.jpg';
-import water from '../../assets/water.jpg';
 import wedding from '../../assets/wedding.jpg';
 import zoe from '../../assets/zoe.jpg';
 
 const p = (src, title) => ({ src, title });
 
 const rows = [
-  [p(lightpost, 'Lightpost'), p(hotdog, 'Hotdog'),    p(leaves, 'Leaves')],
-  [p(annex, 'Annex'),         p(trinkets, 'Trinkets')],
+  [p(plants, 'Plants'), p(trinity, 'Trinity'), p(chair, 'Chair')],
   [p(grammy, 'Grammy')],
-  [p(house, 'House'),         p(mtl_night, 'Montreal Night')],
-  [p(dinner, 'Dinner')],
-  [p(water, 'Water'),         p(wedding, 'Wedding'),   p(noah_stairs, 'Noah Stairs')],
-  [p(one_tree, 'One Tree'),   p(pond, 'Pond')],
+  [p(mtl_night, 'Montreal Night'), p(house, 'House')],
+  [p(wedding, 'Wedding'),   p(noah_stairs, 'Noah Stairs')],
   [p(zoe, 'Zoe')],
   [p(museum_dark, 'Museum Dark'), p(museum_light, 'Museum Light')],
-  [p(trees, 'Trees')],
-  [p(rocks, 'Rocks'),         p(kitchen, 'Kitchen')],
-  [p(village, 'Village'),     p(bench, 'Bench'),       p(nc_dorm, 'NC Dorm')],
-  [p(office, 'Office'),       p(cat, 'Cat')],
+  [p(trees, 'Trees'), p(pond, 'Pond'), p(one_tree, 'One Tree')],
+  [p(bottle, 'Bottle'), p(kitchen, 'Kitchen')],
   [p(tree_water, 'Tree Water')],
-  [p(golden, 'Golden'),       p(street, 'Street')],
-  [p(bikes, 'Bikes')],
+  [p(village, 'Village'), p(cat, 'Cat')],
   [p(beach, 'Beach'),         p(tea, 'Tea'),           p(sunset, 'Sunset')],
   [p(mountain, 'Mountain')],
+  [p(golden, 'Golden'),       p(street, 'Street')],
 ];
 
 const Intro = styled.p`

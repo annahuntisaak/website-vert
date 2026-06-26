@@ -102,14 +102,7 @@ const ExperienceBlock = () => {
           visual search tasks, we investigate evidence of trans-saccadic
           information transfer and the mechanisms underlying choice. In time, we
           aim to develop a novel model of decision that can account for these
-          observed phenomena.{' '}
-          <InlineLink
-            href="https://m2b3.github.io/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            m2b3 website
-          </InlineLink>
+          observed phenomena.
         </Description>
         <FullWidthImg src={eyelinkImg} alt="EyeLink eye-tracking equipment" />
       </LabEntry>
@@ -168,10 +161,7 @@ const ExperienceBlock = () => {
           representations of implicit information and goals held by their task
           partner and/or shared between them. I contributed to the processing,
           computational analysis, and theoretical interpretation of auditory
-          linguistic data, utilizing ELAN annotation software and R scripting.{' '}
-          <InlineLink href="/pub_assets/r_script.R" target="_blank" rel="noreferrer">
-            Portion of R script for organizing annotated data
-          </InlineLink>
+          linguistic data, utilizing ELAN annotation software and R scripting.
         </Description>
       </LabEntry>
 
