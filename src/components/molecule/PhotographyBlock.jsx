@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
+import backyard from '../../assets/backyard.jpg';
 import beach from '../../assets/beach.jpg';
 import bottle from '../../assets/bottle.jpg';
 import cat from '../../assets/cat.jpg';
@@ -35,7 +36,7 @@ const rows = [
   [p(wedding, 'Wedding'),   p(noah_stairs, 'Noah Stairs')],
   [p(zoe, 'Zoe')],
   [p(museum_dark, 'Museum Dark'), p(museum_light, 'Museum Light')],
-  [p(trees, 'Trees'), p(pond, 'Pond'), p(one_tree, 'One Tree')],
+  [p(one_tree, 'One Tree'), p(trees, 'Trees'), p(backyard, 'Backyard')],
   [p(bottle, 'Bottle'), p(kitchen, 'Kitchen')],
   [p(tree_water, 'Tree Water')],
   [p(village, 'Village'), p(cat, 'Cat')],

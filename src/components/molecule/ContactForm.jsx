@@ -73,10 +73,10 @@ const ContactForm = () => {
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
-      <Input {...register('name')} placeholder="name" />
-      <Input {...register('email')} placeholder="email" />
-      <TextArea {...register('message')} placeholder="message" />
-      <Submit type="submit">send</Submit>
+      <Input {...register('name')} placeholder="Name" />
+      <Input {...register('email')} placeholder="Email" />
+      <TextArea {...register('message')} placeholder="Message" />
+      <Submit type="submit">Send</Submit>
     </Form>
   );
 };

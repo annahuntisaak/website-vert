@@ -1,20 +1,18 @@
 import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
 import les from '../../assets/les.jpeg';
-import line from '../../assets/line.jpeg';
+import line from '../../assets/line.jpg';
 import driveway from '../../assets/driveway.jpeg';
 import pools from '../../assets/pools.jpg';
 import hand from '../../assets/hand.jpeg';
-import still from '../../assets/still.jpeg';
-import maine from '../../assets/maine.jpg';
+import still from '../../assets/still.jpg';
 
 // Each piece has a src and a lines array — one string per caption line.
 const rows = [
   [{ src: les,      lines: ['cotton linter, acrylic', '21.5 x 27.5'] }],
-  [{ src: line,     lines: ['gouache, colored pencil, chalk pastel'] }],
-  [{ src: driveway, lines: ['chalk pastel', '6.5 x 6.5'] }, { src: pools, lines: ['lithographic ink', '8 x 6'] }],
-  [{ src: hand,     lines: ['colored pencil, gouache'] }],
-  [{ src: still,    lines: ['chalk pastel'] }, { src: maine, lines: ['linocuts, acrylic'] }],
+  [{ src: still, lines: ['chalk pastel', '11 x 14'] }, { src: hand,     lines: ['colored pencil, gouache', '12 x 19.75'] }],
+  [{ src: line,     lines: ['gouache, colored pencil, chalk pastel', '10.25 x 13.25'] }],
+  [{ src: driveway, lines: ['chalk pastel', '6.5 x 6.5'] }, { src: pools, lines: ['lithographic ink', '8 x 6'] }]
 ];
 
 const Gallery = styled.div`

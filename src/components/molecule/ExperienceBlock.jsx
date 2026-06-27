@@ -96,12 +96,10 @@ const ExperienceBlock = () => {
         <LabName>Mind, Machines, Body, Brain, and Behavior Lab</LabName>
         <Field>McGill University | psychophysics</Field>
         <Description>
-          I'm currently completing my honors research in the Mind, Machines,
-          Brain, Body, Behavior (m2b3) Lab under the supervision of Dr. Krishna.
-          Through psychophysics experiments, which involve eye tracking during
-          visual search tasks, we investigate evidence of trans-saccadic
-          information transfer and the mechanisms underlying choice. In time, we
-          aim to develop a novel model of decision that can account for these
+          Through psychophysics experiments involving eye tracking during
+          visual search tasks, we investigated evidence of trans-saccadic
+          information transfer and the mechanisms underlying choice. This work contributed to
+          the development of a novel model of decision-making that could account for these
           observed phenomena.
         </Description>
         <FullWidthImg src={eyelinkImg} alt="EyeLink eye-tracking equipment" />
