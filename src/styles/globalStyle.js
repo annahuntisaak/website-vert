@@ -2,14 +2,15 @@ import { createGlobalStyle } from 'styled-components';
 
 export const GlobalStyle = createGlobalStyle`
   :root {
-    --font-sans: 'Roboto Mono', monospace;
-    --font-mono: 'Roboto Mono', monospace;
+    --font-sans: 'Josefin Sans', sans-serif;
+    --font-mono: 'Josefin Sans', sans-serif;
   }
 
   * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    cursor: none !important;
   }
 
   html {
@@ -18,30 +19,39 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    font-family: var(--font-mono);
-    font-weight: 400;
-    font-size: 13px;
+    font-family: var(--font-sans);
+    font-weight: 300;
+    font-size: 14px;
     background-color: #fff6f2;
     color: rgb(81, 56, 46);
-    letter-spacing: 0.08em;
-    word-spacing: 0.05em;
+    letter-spacing: 0.12em;
+    word-spacing: 0.08em;
   }
 
   h1 {
-    font-family: var(--font-mono);
+    font-family: var(--font-sans);
     font-weight: 500;
     color: rgb(68, 33, 9);
-    letter-spacing: 0.1em;
+    letter-spacing: 0.15em;
   }
 
   h2, h3 {
-    font-family: var(--font-mono);
+    font-family: var(--font-sans);
     font-weight: 500;
     color: rgb(68, 33, 9);
-    letter-spacing: 0.1em;
+    letter-spacing: 0.15em;
   }
 
   p {
     color: rgb(81, 56, 46);
+  }
+
+  @media (max-width: 700px) {
+    body {
+      font-size: 13px;
+    }
+    h2, h3 {
+      font-size: 1.1rem;
+    }
   }
 `;

@@ -6,7 +6,11 @@ import SectionTitleImage from '../../molecule/SectionTitleImage';
 const Section = styled.section`
   width: 100%;
   max-width: 1000px;
-  padding: 4rem 2rem;
+  padding: 2rem 2rem;
+
+  @media (max-width: 700px) {
+    padding: 1.5rem 1.5rem;
+  }
 `;
 
 const TraditionalArtSection = () => {

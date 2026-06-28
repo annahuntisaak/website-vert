@@ -28,6 +28,12 @@ const Row = styled.div`
   width: 100%;
   max-width: 700px;
   margin: 0 auto;
+
+  @media (max-width: 700px) {
+    flex-direction: column;
+    max-width: 100%;
+    gap: 12px;
+  }
 `;
 
 const Cell = styled.div`
@@ -40,6 +46,11 @@ const Cell = styled.div`
 
   &:hover div {
     opacity: 1;
+  }
+
+  @media (max-width: 700px) {
+    flex: none;
+    width: 100%;
   }
 `;
 
@@ -57,7 +68,8 @@ const HoverLabel = styled.div`
   transform: translate(-50%, -50%);
   opacity: 0;
   transition: opacity 0.3s ease;
-  font-size: 0.75rem;
+  font-size: 14px;
+  font-weight: 300;
   text-align: center;
   pointer-events: none;
   width: 90%;

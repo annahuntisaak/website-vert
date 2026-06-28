@@ -20,6 +20,10 @@ const Inner = styled.div`
   width: 100%;
   max-width: 600px;
   padding: 7rem 3rem 6rem;
+
+  @media (max-width: 700px) {
+    padding: 4rem 1.5rem 4rem;
+  }
 `;
 
 const Intro = styled.p`
