@@ -94,7 +94,7 @@ const ExperienceBlock = () => {
 
       <LabEntry>
         <LabName>Mind, Machines, Body, Brain, and Behavior Lab</LabName>
-        <Field>McGill University | psychophysics</Field>
+        <Field>McGill University</Field>
         <Description>
           Through psychophysics experiments involving eye tracking during
           visual search tasks, we investigated evidence of trans-saccadic
@@ -106,8 +106,8 @@ const ExperienceBlock = () => {
       </LabEntry>
 
       <LabEntry>
-        <LabName>National Science Foundation: Precision Microbiome Engineering, Crook Lab</LabName>
-        <Field>biological engineering</Field>
+        <LabName>Crook Lab</LabName>
+        <Field>National Science Foundation: Precision Microbiome Engineering</Field>
         <Description>
           We explored a designer plasmid and recombination-based system of
           genome editing in Enterobacter ludwigii, with the long-term goal of
@@ -152,7 +152,7 @@ const ExperienceBlock = () => {
 
       <LabEntry>
         <LabName>Dahan Lab</LabName>
-        <Field>University of Pennsylvania | psycholinguistics</Field>
+        <Field>University of Pennsylvania</Field>
         <Description>
           We assessed conversational response patterns of participants engaged
           in a strategic, cooperation-based task to explore internal
@@ -164,8 +164,8 @@ const ExperienceBlock = () => {
       </LabEntry>
 
       <LabEntry>
-        <LabName>University of Pennsylvania: Penn Computational Cognitive Neuroscience Lab</LabName>
-        <Field>computational neuroscience</Field>
+        <LabName>Penn Computational Cognitive Neuroscience Lab</LabName>
+        <Field>University of Pennsylvania</Field>
         <Description>
           I gained foundational knowledge of conducting human research, from
           experimental design (including the use of PsychoPy to design visual
