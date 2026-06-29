@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 // ── Desktop nav ──────────────────────────────────────────────────────────────
 
@@ -77,17 +77,24 @@ const Bar = styled.span`
   border-radius: 2px;
 `;
 
+const unfurl = keyframes`
+  from { clip-path: inset(0 0 100% 0 round 14px); }
+  to   { clip-path: inset(0 0 0%   0 round 14px); }
+`;
+
 const Dropdown = styled.div`
   position: absolute;
   top: calc(100% + 0.6rem);
   left: 0;
-  background: rgba(255, 246, 242, 0.88);
+  background: rgba(255, 246, 242, 0.25);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border-radius: 14px;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   min-width: 160px;
+  padding: 0.45rem 0;
+  animation: ${unfurl} 0.22s ease-out;
 
   a {
     display: block;

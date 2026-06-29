@@ -38,15 +38,18 @@ const CustomCursor = () => {
   return (
     <Cursor ref={cursorRef}>
       <svg
-        viewBox="-0.5 -0.5 14 17"
-        width="16"
+        viewBox="-1 -1 12 18"
+        width="13"
         height="19"
         xmlns="http://www.w3.org/2000/svg"
       >
-        {/* tip → left edge down → concave notch → right point → diagonal back to tip */}
         <path
-          d="M0,0 L0,16 L5,11 L13,8 Z"
+          d="M0,0 L0,16 L2.5,8.5 L10,7 Z"
           fill="currentColor"
+          stroke="currentColor"
+          strokeWidth="1"
+          strokeLinejoin="round"
+          strokeLinecap="round"
         />
       </svg>
     </Cursor>
