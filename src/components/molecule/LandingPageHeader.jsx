@@ -144,7 +144,7 @@ const LandingPageHeader = () => {
   return (
     <>
       {/* Desktop */}
-      <NavWrapper>
+      <NavWrapper data-header>
         <NavPill>
           {sections.map(({ label, id }) => (
             <a key={id} href={`#${id}`} onClick={(e) => scrollTo(e, id)}>
@@ -155,7 +155,7 @@ const LandingPageHeader = () => {
       </NavWrapper>
 
       {/* Mobile */}
-      <MobileNav ref={mobileRef}>
+      <MobileNav data-header ref={mobileRef}>
         <HamburgerBtn onClick={() => setOpen((o) => !o)} aria-label="Menu">
           <Bar />
           <Bar />

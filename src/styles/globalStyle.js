@@ -54,4 +54,8 @@ export const GlobalStyle = createGlobalStyle`
       font-size: 1.1rem;
     }
   }
+
+  body.lightbox-open [data-header] {
+    display: none !important;
+  }
 `;

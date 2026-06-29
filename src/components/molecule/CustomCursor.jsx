@@ -1,43 +1,56 @@
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
-const Dot = styled.div`
+// Hotspot is at the tip (top-left of SVG), so no centering transform needed.
+const Cursor = styled.div`
   position: fixed;
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
   pointer-events: none;
   z-index: 99999;
-  transform: translate(-50%, -50%);
-  transition: background-color 0.25s ease;
-  background-color: rgb(68, 33, 9);
   left: -50px;
   top: -50px;
+  color: rgb(68, 33, 9);
+  transition: color 0.25s ease;
+  line-height: 0;
 `;
 
 const CustomCursor = () => {
-  const dotRef = useRef(null);
+  const cursorRef = useRef(null);
 
   useEffect(() => {
     const contact = () => document.getElementById('contact');
 
     const onMove = (e) => {
-      const dot = dotRef.current;
-      if (!dot) return;
-      dot.style.left = e.clientX + 'px';
-      dot.style.top = e.clientY + 'px';
+      const el = cursorRef.current;
+      if (!el) return;
+      el.style.left = e.clientX + 'px';
+      el.style.top = e.clientY + 'px';
 
-      const el = document.elementFromPoint(e.clientX, e.clientY);
+      const target = document.elementFromPoint(e.clientX, e.clientY);
       const c = contact();
-      dot.style.backgroundColor =
-        c && el && c.contains(el) ? '#fff6f2' : 'rgb(68, 33, 9)';
+      el.style.color =
+        c && target && c.contains(target) ? '#fff6f2' : 'rgb(68, 33, 9)';
     };
 
     window.addEventListener('mousemove', onMove);
     return () => window.removeEventListener('mousemove', onMove);
   }, []);
 
-  return <Dot ref={dotRef} />;
+  return (
+    <Cursor ref={cursorRef}>
+      <svg
+        viewBox="-0.5 -0.5 14 17"
+        width="16"
+        height="19"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        {/* tip → left edge down → concave notch → right point → diagonal back to tip */}
+        <path
+          d="M0,0 L0,16 L5,11 L13,8 Z"
+          fill="currentColor"
+        />
+      </svg>
+    </Cursor>
+  );
 };
 
 export default CustomCursor;

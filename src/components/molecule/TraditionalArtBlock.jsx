@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 import les from '../../assets/les.jpeg';
 import line from '../../assets/line.jpg';
@@ -10,10 +10,15 @@ import still from '../../assets/still.jpg';
 // Each piece has a src and a lines array — one string per caption line.
 const rows = [
   [{ src: les,      lines: ['cotton linter, acrylic', '21.5 x 27.5'] }],
-  [{ src: still, lines: ['chalk pastel', '11 x 14'] }, { src: hand,     lines: ['colored pencil, gouache', '12 x 19.75'] }],
+  [{ src: still,    lines: ['chalk pastel', '11 x 14'] }, { src: hand, lines: ['colored pencil, gouache', '12 x 19.75'] }],
   [{ src: line,     lines: ['gouache, colored pencil, chalk pastel', '10.25 x 13.25'] }],
-  [{ src: driveway, lines: ['chalk pastel', '6.5 x 6.5'] }, { src: pools, lines: ['lithographic ink', '8 x 6'] }]
+  [{ src: driveway, lines: ['chalk pastel', '6.5 x 6.5'] }, { src: pools, lines: ['lithographic ink', '8 x 6'] }],
 ];
+
+// Flat ordered list used for lightbox navigation.
+const allImages = rows.flat();
+
+// ── Gallery ───────────────────────────────────────────────────────────────────
 
 const Gallery = styled.div`
   display: flex;
@@ -80,12 +85,108 @@ const CaptionLine = styled.span`
   line-height: 1.6;
 `;
 
+// ── Lightbox ──────────────────────────────────────────────────────────────────
+
+const Overlay = styled.div`
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(255, 246, 242, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const LightboxImg = styled.img`
+  max-width: 80vw;
+  max-height: 80vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+`;
+
+const CloseBtn = styled.button`
+  position: fixed;
+  top: 2.4rem;
+  right: 2.4rem;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(68, 33, 9, 0.12);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 2px 18px rgba(0, 0, 0, 0.07);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.8;
+  transition: opacity 0.2s ease, background 0.2s ease;
+
+  &:hover {
+    opacity: 1;
+    background: rgba(68, 33, 9, 0.22);
+  }
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 1.5px;
+    background: rgb(68, 33, 9);
+    border-radius: 2px;
+  }
+  &::before { transform: rotate(45deg); }
+  &::after  { transform: rotate(-45deg); }
+`;
+
+const ArrowBtn = styled.button`
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  ${(p) => (p.$side === 'left' ? 'left: 3rem;' : 'right: 3rem;')}
+  background: none;
+  border: none;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.65;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &::before {
+    content: '';
+    display: block;
+    width: 13px;
+    height: 13px;
+    border-top: 1.5px solid rgb(68, 33, 9);
+    border-right: 1.5px solid rgb(68, 33, 9);
+    transform: ${(p) => (p.$side === 'left' ? 'rotate(-135deg) translateY(-50%)' : 'rotate(45deg) translateY(-50%)')};
+  }
+
+  @media (max-width: 700px) {
+    top: auto;
+    transform: none;
+    bottom: 2.5rem;
+  }
+`;
+
+// ── Component ─────────────────────────────────────────────────────────────────
+
 const DEFAULT_RATIO = 1.5;
 
 const TraditionalArtBlock = () => {
   const [ratios, setRatios] = useState(() =>
-    Object.fromEntries(rows.flat().map((p) => [p.src, DEFAULT_RATIO]))
+    Object.fromEntries(allImages.map((p) => [p.src, DEFAULT_RATIO]))
   );
+  const [activeIndex, setActiveIndex] = useState(null);
 
   const handleLoad = useCallback((e, src) => {
     const { naturalWidth, naturalHeight } = e.target;
@@ -94,31 +195,86 @@ const TraditionalArtBlock = () => {
     }
   }, []);
 
+  // Keyboard navigation and body scroll lock
+  useEffect(() => {
+    if (activeIndex === null) return;
+    document.body.style.overflow = 'hidden';
+    document.body.classList.add('lightbox-open');
+    const onKey = (e) => {
+      if (e.key === 'ArrowRight')
+        setActiveIndex((i) => (i < allImages.length - 1 ? i + 1 : i));
+      else if (e.key === 'ArrowLeft')
+        setActiveIndex((i) => (i > 0 ? i - 1 : i));
+      else if (e.key === 'Escape')
+        setActiveIndex(null);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      document.body.style.overflow = '';
+      document.body.classList.remove('lightbox-open');
+    };
+  }, [activeIndex]);
+
   return (
-    <Gallery>
-      {rows.map((row, rowIndex) => {
-        const total = row.reduce((sum, p) => sum + ratios[p.src], 0);
-        const scale = total < 1 ? 1 / total : 1;
-        return (
-          <Row key={rowIndex}>
-            {row.map((piece) => (
-              <Cell key={piece.src} $ratio={ratios[piece.src] * scale}>
-                <Img
-                  src={piece.src}
-                  alt={piece.lines.join(', ')}
-                  onLoad={(e) => handleLoad(e, piece.src)}
-                />
-                <HoverLabel>
-                  {piece.lines.map((line, i) => (
-                    <CaptionLine key={i}>{line}</CaptionLine>
-                  ))}
-                </HoverLabel>
-              </Cell>
-            ))}
-          </Row>
-        );
-      })}
-    </Gallery>
+    <>
+      <Gallery>
+        {rows.map((row, rowIndex) => {
+          const total = row.reduce((sum, p) => sum + ratios[p.src], 0);
+          const scale = total < 1 ? 1 / total : 1;
+          return (
+            <Row key={rowIndex}>
+              {row.map((piece) => (
+                <Cell
+                  key={piece.src}
+                  $ratio={ratios[piece.src] * scale}
+                  onClick={() => setActiveIndex(allImages.findIndex((p) => p.src === piece.src))}
+                >
+                  <Img
+                    src={piece.src}
+                    alt={piece.lines.join(', ')}
+                    onLoad={(e) => handleLoad(e, piece.src)}
+                  />
+                  <HoverLabel>
+                    {piece.lines.map((line, i) => (
+                      <CaptionLine key={i}>{line}</CaptionLine>
+                    ))}
+                  </HoverLabel>
+                </Cell>
+              ))}
+            </Row>
+          );
+        })}
+      </Gallery>
+
+      {activeIndex !== null && (
+        <Overlay onClick={() => setActiveIndex(null)}>
+          <CloseBtn
+            aria-label="Close"
+            onClick={(e) => { e.stopPropagation(); setActiveIndex(null); }}
+          />
+          {activeIndex > 0 && (
+            <ArrowBtn
+              $side="left"
+              aria-label="Previous"
+              onClick={(e) => { e.stopPropagation(); setActiveIndex((i) => i - 1); }}
+            />
+          )}
+          <LightboxImg
+            src={allImages[activeIndex].src}
+            alt={allImages[activeIndex].lines.join(', ')}
+            onClick={(e) => e.stopPropagation()}
+          />
+          {activeIndex < allImages.length - 1 && (
+            <ArrowBtn
+              $side="right"
+              aria-label="Next"
+              onClick={(e) => { e.stopPropagation(); setActiveIndex((i) => i + 1); }}
+            />
+          )}
+        </Overlay>
+      )}
+    </>
   );
 };
 

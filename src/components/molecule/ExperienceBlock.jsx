@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 import eyelinkImg from '../../assets/eyelink.jpg';
 import firstImg from '../../assets/first.jpg';
@@ -8,6 +8,13 @@ import thesisCoverImg from '../../assets/thesis_cover.png';
 const SLIDE_DECK_URL = '/slides.pdf';
 const THESIS_URL = '/thesis.pdf';
 const RESUME_URL = '/resume.pdf';
+
+const crookImages = [
+  { src: firstImg,  alt: 'Slide deck', downloadUrl: SLIDE_DECK_URL, downloadName: 'slides.pdf' },
+  { src: posterImg, alt: 'Poster',     downloadUrl: '/poster.pdf',  downloadName: 'poster.pdf' },
+];
+
+// ── Timeline layout ───────────────────────────────────────────────────────────
 
 const Intro = styled.p`
   line-height: 1.7;
@@ -142,7 +149,6 @@ const MediaRow = styled.div`
   }
 `;
 
-// Plain flex cell — for non-downloadable images (eyelink).
 const ImgCell = styled.div`
   flex: ${(props) => props.$ratio};
 
@@ -158,7 +164,6 @@ const ImgCell = styled.div`
   }
 `;
 
-// Hoverable flex cell — for downloadable images.
 const HoverImgCell = styled.div`
   flex: ${(props) => props.$ratio};
   position: relative;
@@ -206,6 +211,127 @@ const ImgHoverLabel = styled.div`
   width: 80%;
 `;
 
+// ── Lightbox ──────────────────────────────────────────────────────────────────
+
+const Overlay = styled.div`
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(255, 246, 242, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const LightboxContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5rem;
+`;
+
+const LightboxImg = styled.img`
+  max-width: 80vw;
+  max-height: 62vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+`;
+
+const DownloadBtn = styled.button`
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(68, 33, 9, 0.12);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 2px 18px rgba(0, 0, 0, 0.07);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.8;
+  transition: opacity 0.2s ease, background 0.2s ease;
+
+  &:hover {
+    opacity: 1;
+    background: rgba(68, 33, 9, 0.22);
+  }
+`;
+
+const CloseBtn = styled.button`
+  position: fixed;
+  top: 2.4rem;
+  right: 2.4rem;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(68, 33, 9, 0.12);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 2px 18px rgba(0, 0, 0, 0.07);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.8;
+  transition: opacity 0.2s ease, background 0.2s ease;
+
+  &:hover {
+    opacity: 1;
+    background: rgba(68, 33, 9, 0.22);
+  }
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 1.5px;
+    background: rgb(68, 33, 9);
+    border-radius: 2px;
+  }
+  &::before { transform: rotate(45deg); }
+  &::after  { transform: rotate(-45deg); }
+`;
+
+const ArrowBtn = styled.button`
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  ${(p) => (p.$side === 'left' ? 'left: 3rem;' : 'right: 3rem;')}
+  background: none;
+  border: none;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.65;
+  transition: opacity 0.2s ease;
+
+  &:hover { opacity: 1; }
+
+  &::before {
+    content: '';
+    display: block;
+    width: 13px;
+    height: 13px;
+    border-top: 1.5px solid rgb(68, 33, 9);
+    border-right: 1.5px solid rgb(68, 33, 9);
+    transform: ${(p) => (p.$side === 'left' ? 'rotate(-135deg) translateY(-50%)' : 'rotate(45deg) translateY(-50%)')};
+  }
+
+  @media (max-width: 700px) {
+    top: auto;
+    transform: none;
+    bottom: 2.5rem;
+  }
+`;
+
+// ── helpers ───────────────────────────────────────────────────────────────────
+
 const download = (url, filename) => {
   const a = document.createElement('a');
   a.href = url;
@@ -213,8 +339,11 @@ const download = (url, filename) => {
   a.click();
 };
 
+// ── Component ─────────────────────────────────────────────────────────────────
+
 const ExperienceBlock = () => {
   const [ratios, setRatios] = useState({ eyelink: 1.5, thesis: 1.5, first: 1.5, poster: 1.5 });
+  const [activeIndex, setActiveIndex] = useState(null);
 
   const handleLoad = useCallback((e, key) => {
     const { naturalWidth, naturalHeight } = e.target;
@@ -222,6 +351,26 @@ const ExperienceBlock = () => {
       setRatios((prev) => ({ ...prev, [key]: naturalWidth / naturalHeight }));
     }
   }, []);
+
+  useEffect(() => {
+    if (activeIndex === null) return;
+    document.body.style.overflow = 'hidden';
+    document.body.classList.add('lightbox-open');
+    const onKey = (e) => {
+      if (e.key === 'ArrowRight')
+        setActiveIndex((i) => (i < crookImages.length - 1 ? i + 1 : i));
+      else if (e.key === 'ArrowLeft')
+        setActiveIndex((i) => (i > 0 ? i - 1 : i));
+      else if (e.key === 'Escape')
+        setActiveIndex(null);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      document.body.style.overflow = '';
+      document.body.classList.remove('lightbox-open');
+    };
+  }, [activeIndex]);
 
   const entries = [
     {
@@ -235,7 +384,7 @@ const ExperienceBlock = () => {
           <Description>
             Through eye tracking experiments, we investigated evidence of trans-saccadic information transfer
             and the mechanisms underlying visual attention and decision-making. This work contributed to the
-            ongoing development of a novel mathematical model of human choice behavior. My honor's thesis on 
+            ongoing development of a novel mathematical model of human choice behavior. My honor's thesis on
             this project is below.
           </Description>
           <MediaRow>
@@ -256,7 +405,13 @@ const ExperienceBlock = () => {
                     >
                       <img src={thesisCoverImg} alt="Thesis cover" onLoad={(e) => handleLoad(e, 'thesis')} />
                     </ImgLink>
-                    <ImgHoverLabel>Click to download</ImgHoverLabel>
+                    <ImgHoverLabel>
+                      <svg width="20" height="20" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <line x1="7" y1="1" x2="7" y2="9.5" stroke="rgb(68,33,9)" strokeWidth="1.5" strokeLinecap="round"/>
+                        <polyline points="4,7 7,10 10,7" fill="none" stroke="rgb(68,33,9)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        <line x1="2" y1="13" x2="12" y2="13" stroke="rgb(68,33,9)" strokeWidth="1.5" strokeLinecap="round"/>
+                      </svg>
+                    </ImgHoverLabel>
                   </HoverImgCell>
                 </>
               );
@@ -289,17 +444,13 @@ const ExperienceBlock = () => {
               const scale = total < 1 ? 1 / total : 1;
               return (
                 <>
-                  <HoverImgCell $ratio={ratios.first * scale}>
-                    <ImgLink href={SLIDE_DECK_URL} target="_blank" rel="noreferrer" onClick={() => download(SLIDE_DECK_URL, 'slides.pdf')}>
-                      <img src={firstImg} alt="Slide deck" onLoad={(e) => handleLoad(e, 'first')} />
-                    </ImgLink>
-                    <ImgHoverLabel>Click to download</ImgHoverLabel>
+                  <HoverImgCell $ratio={ratios.first * scale} onClick={() => setActiveIndex(0)}>
+                    <img src={firstImg} alt="Slide deck" onLoad={(e) => handleLoad(e, 'first')} />
+                    <ImgHoverLabel />
                   </HoverImgCell>
-                  <HoverImgCell $ratio={ratios.poster * scale}>
-                    <ImgLink href={posterImg} target="_blank" rel="noreferrer" onClick={() => download(posterImg, 'poster.jpg')}>
-                      <img src={posterImg} alt="Poster" onLoad={(e) => handleLoad(e, 'poster')} />
-                    </ImgLink>
-                    <ImgHoverLabel>Click to download</ImgHoverLabel>
+                  <HoverImgCell $ratio={ratios.poster * scale} onClick={() => setActiveIndex(1)}>
+                    <img src={posterImg} alt="Poster" onLoad={(e) => handleLoad(e, 'poster')} />
+                    <ImgHoverLabel />
                   </HoverImgCell>
                 </>
               );
@@ -379,6 +530,45 @@ const ExperienceBlock = () => {
           );
         })}
       </Timeline>
+
+      {activeIndex !== null && (
+        <Overlay onClick={() => setActiveIndex(null)}>
+          <CloseBtn
+            aria-label="Close"
+            onClick={(e) => { e.stopPropagation(); setActiveIndex(null); }}
+          />
+          {activeIndex > 0 && (
+            <ArrowBtn
+              $side="left"
+              aria-label="Previous"
+              onClick={(e) => { e.stopPropagation(); setActiveIndex((i) => i - 1); }}
+            />
+          )}
+          <LightboxContent onClick={(e) => e.stopPropagation()}>
+            <LightboxImg
+              src={crookImages[activeIndex].src}
+              alt={crookImages[activeIndex].alt}
+            />
+            <DownloadBtn
+              aria-label="Download"
+              onClick={() => download(crookImages[activeIndex].downloadUrl, crookImages[activeIndex].downloadName)}
+            >
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <line x1="7" y1="1" x2="7" y2="9.5" stroke="rgb(68,33,9)" strokeWidth="1.5" strokeLinecap="round"/>
+                <polyline points="4,7 7,10 10,7" fill="none" stroke="rgb(68,33,9)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <line x1="2" y1="13" x2="12" y2="13" stroke="rgb(68,33,9)" strokeWidth="1.5" strokeLinecap="round"/>
+              </svg>
+            </DownloadBtn>
+          </LightboxContent>
+          {activeIndex < crookImages.length - 1 && (
+            <ArrowBtn
+              $side="right"
+              aria-label="Next"
+              onClick={(e) => { e.stopPropagation(); setActiveIndex((i) => i + 1); }}
+            />
+          )}
+        </Overlay>
+      )}
     </div>
   );
 };
