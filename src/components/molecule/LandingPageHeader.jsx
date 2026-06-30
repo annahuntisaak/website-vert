@@ -115,6 +115,7 @@ const Dropdown = styled.div`
 
 const sections = [
   { label: 'Home',          id: 'home' },
+  { label: 'About',         id: 'about' },
   { label: 'Experience',    id: 'experience' },
   { label: 'Traditional Art', id: 'traditional-art' },
   { label: 'Photography',   id: 'photography' },

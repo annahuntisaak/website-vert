@@ -1,15 +1,20 @@
 import React from 'react';
+import styled from 'styled-components';
+
+const Text = styled.p`
+  line-height: 1.7;
+`;
 
 const AboutMe = () => {
   return (
     <div>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse cillum dolore eu fugiat nulla pariatur.
-      </p>
+      <Text>
+      I'm Anna Rose Hunt-Isaak, a researcher and multimedia artist interested in exploring the complex 
+      intersections of human cognition and behavior, technology, art, and design. I hope to gain 
+      greater hands-on experience with the research and development of technologies that foster close, 
+      reciprocal relationships with their biological users and to discover the roles that human-oriented 
+      design, aesthetics, and creative expression have to play in this world.
+      </Text>
     </div>
   );
 };

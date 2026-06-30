@@ -5,6 +5,7 @@ import SectionTitleImage from '../../molecule/SectionTitleImage';
 
 const Section = styled.section`
   width: 100%;
+  background-color: #fff6f2;
   padding: 4rem 6rem 10rem;
 
   @media (max-width: 700px) {

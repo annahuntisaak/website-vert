@@ -3,7 +3,14 @@ import styled from 'styled-components';
 import TraditionalArtBlock from '../../molecule/TraditionalArtBlock';
 import SectionTitleImage from '../../molecule/SectionTitleImage';
 
-const Section = styled.section`
+const Outer = styled.section`
+  width: 100%;
+  background-color: #fff6f2;
+  display: flex;
+  justify-content: center;
+`;
+
+const Inner = styled.div`
   width: 100%;
   max-width: 1000px;
   padding: 2rem 2rem;
@@ -15,10 +22,12 @@ const Section = styled.section`
 
 const TraditionalArtSection = () => {
   return (
-    <Section id="traditional-art">
-      <SectionTitleImage src="/titles/traditional-art.png" alt="Traditional Art" />
-      <TraditionalArtBlock />
-    </Section>
+    <Outer id="traditional-art">
+      <Inner>
+        <SectionTitleImage src="/titles/traditional-art.png" alt="Traditional Art" />
+        <TraditionalArtBlock />
+      </Inner>
+    </Outer>
   );
 };
 

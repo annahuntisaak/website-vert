@@ -8,8 +8,8 @@ const Wrapper = styled.div`
 const LandingTitle = () => {
   return (
     <Wrapper>
-      <h1>Lorem Ipsum</h1>
-      <p>Designer · Artist · Photographer</p>
+      <h1>Anna Rose</h1>
+      <p>Researcher · Designer · Artist</p>
     </Wrapper>
   );
 };

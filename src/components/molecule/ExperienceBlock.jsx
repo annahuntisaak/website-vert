@@ -176,7 +176,7 @@ const HoverImgCell = styled.div`
   }
 
   &:hover img {
-    opacity: 0.25;
+    opacity: 0.45;
   }
 
   &:hover > div {
@@ -210,6 +210,15 @@ const ImgHoverLabel = styled.div`
   pointer-events: none;
   width: 80%;
 `;
+
+const ExpandIcon = () => (
+  <svg width="26" height="18" viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <polyline points="1,3.5 1,1 4.5,1"    stroke="rgb(81,56,46)" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
+    <polyline points="13.5,1 17,1 17,3.5"  stroke="rgb(81,56,46)" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
+    <polyline points="17,8.5 17,11 13.5,11" stroke="rgb(81,56,46)" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
+    <polyline points="4.5,11 1,11 1,8.5"   stroke="rgb(81,56,46)" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
 
 // ── Lightbox ──────────────────────────────────────────────────────────────────
 
@@ -407,9 +416,9 @@ const ExperienceBlock = () => {
                     </ImgLink>
                     <ImgHoverLabel>
                       <svg width="20" height="20" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <line x1="7" y1="1" x2="7" y2="9.5" stroke="rgb(68,33,9)" strokeWidth="1.5" strokeLinecap="round"/>
-                        <polyline points="4,7 7,10 10,7" fill="none" stroke="rgb(68,33,9)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                        <line x1="2" y1="13" x2="12" y2="13" stroke="rgb(68,33,9)" strokeWidth="1.5" strokeLinecap="round"/>
+                        <line x1="7" y1="1" x2="7" y2="9.5" stroke="rgb(68,33,9)" strokeWidth="1" strokeLinecap="round"/>
+                        <polyline points="4,7 7,10 10,7" fill="none" stroke="rgb(68,33,9)" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
+                        <line x1="2" y1="13" x2="12" y2="13" stroke="rgb(68,33,9)" strokeWidth="1" strokeLinecap="round"/>
                       </svg>
                     </ImgHoverLabel>
                   </HoverImgCell>
@@ -446,11 +455,15 @@ const ExperienceBlock = () => {
                 <>
                   <HoverImgCell $ratio={ratios.first * scale} onClick={() => setActiveIndex(0)}>
                     <img src={firstImg} alt="Slide deck" onLoad={(e) => handleLoad(e, 'first')} />
-                    <ImgHoverLabel />
+                    <ImgHoverLabel>
+                      <ExpandIcon />
+                    </ImgHoverLabel>
                   </HoverImgCell>
                   <HoverImgCell $ratio={ratios.poster * scale} onClick={() => setActiveIndex(1)}>
                     <img src={posterImg} alt="Poster" onLoad={(e) => handleLoad(e, 'poster')} />
-                    <ImgHoverLabel />
+                    <ImgHoverLabel>
+                      <ExpandIcon />
+                    </ImgHoverLabel>
                   </HoverImgCell>
                 </>
               );
@@ -554,9 +567,9 @@ const ExperienceBlock = () => {
               onClick={() => download(crookImages[activeIndex].downloadUrl, crookImages[activeIndex].downloadName)}
             >
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <line x1="7" y1="1" x2="7" y2="9.5" stroke="rgb(68,33,9)" strokeWidth="1.5" strokeLinecap="round"/>
-                <polyline points="4,7 7,10 10,7" fill="none" stroke="rgb(68,33,9)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                <line x1="2" y1="13" x2="12" y2="13" stroke="rgb(68,33,9)" strokeWidth="1.5" strokeLinecap="round"/>
+                <line x1="7" y1="1" x2="7" y2="9.5" stroke="rgb(68,33,9)" strokeWidth="1" strokeLinecap="round"/>
+                <polyline points="4,7 7,10 10,7" fill="none" stroke="rgb(68,33,9)" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
+                <line x1="2" y1="13" x2="12" y2="13" stroke="rgb(68,33,9)" strokeWidth="1" strokeLinecap="round"/>
               </svg>
             </DownloadBtn>
           </LightboxContent>

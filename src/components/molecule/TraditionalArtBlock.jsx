@@ -4,7 +4,7 @@ import les from '../../assets/les.jpeg';
 import line from '../../assets/line.jpg';
 import driveway from '../../assets/driveway.jpeg';
 import pools from '../../assets/pools.jpg';
-import hand from '../../assets/hand.jpeg';
+import hand from '../../assets/hand.jpg';
 import still from '../../assets/still.jpg';
 
 // Each piece has a src and a lines array — one string per caption line.
@@ -46,7 +46,7 @@ const Cell = styled.div`
   position: relative;
 
   &:hover img {
-    opacity: 0.25;
+    opacity: 0.1;
   }
 
   &:hover div {

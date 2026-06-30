@@ -1,13 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
-import ExperienceBlock from '../../molecule/ExperienceBlock';
 import SectionTitleImage from '../../molecule/SectionTitleImage';
+import AboutMe from '../../molecule/AboutMe';
 
 const Outer = styled.section`
   width: 100%;
-  background-color: #fff6f2;
+  background-color: rgb(26, 13, 7);
   display: flex;
   justify-content: center;
+
+  h1, h2, h3, p, a, span, label {
+    color: #fff6f2;
+  }
 `;
 
 const Inner = styled.div`
@@ -16,19 +20,19 @@ const Inner = styled.div`
   padding: 6rem 2rem;
 
   @media (max-width: 700px) {
-    padding: 0.5rem 1.5rem 4rem;
+    padding: 4rem 1.5rem 4rem;
   }
 `;
 
-const ExperienceSection = () => {
+const AboutSection = () => {
   return (
-    <Outer id="experience">
+    <Outer id="about">
       <Inner>
-        <SectionTitleImage src="/titles/experience.png" alt="Experience" />
-        <ExperienceBlock />
+        <SectionTitleImage src="/titles/about.png" alt="About" />
+        <AboutMe />
       </Inner>
     </Outer>
   );
 };
 
-export default ExperienceSection;
+export default AboutSection;

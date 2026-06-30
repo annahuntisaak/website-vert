@@ -28,6 +28,7 @@ const Inner = styled.div`
 
 const Intro = styled.p`
   text-align: center;
+  line-height: 1.7;
   margin-bottom: 2rem;
 `;
 

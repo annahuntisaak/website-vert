@@ -49,7 +49,7 @@ const Submit = styled.button`
   font-family: var(--font-mono);
   font-size: 13px;
   letter-spacing: 0.12em;
-  padding: 1rem 2rem;
+  padding: 0.75rem 1.5rem;
   cursor: pointer;
 
   &:hover {

@@ -74,7 +74,7 @@ const Cell = styled.div`
   position: relative;
 
   &:hover img {
-    opacity: 0.25;
+    opacity: 0.45;
   }
 
   &:hover div {

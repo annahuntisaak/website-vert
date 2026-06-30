@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import LandingPageHeader from '../../molecule/LandingPageHeader';
 import HomeSection from './HomeSection';
+import AboutSection from './AboutSection';
 import ExperienceSection from './ExperienceSection';
 import TraditionalArtSection from './TraditionalArtSection';
 import PhotographySection from './PhotographySection';
@@ -17,7 +18,7 @@ const ContentSections = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  background-color: #fff6f2;
+  background-color: rgb(26, 13, 7);
 `;
 
 const MainPage = () => {
@@ -26,6 +27,7 @@ const MainPage = () => {
       <LandingPageHeader />
       <HomeSection />
       <ContentSections>
+        <AboutSection />
         <ExperienceSection />
         <TraditionalArtSection />
         <PhotographySection />
