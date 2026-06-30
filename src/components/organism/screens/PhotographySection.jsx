@@ -6,10 +6,10 @@ import SectionTitleImage from '../../molecule/SectionTitleImage';
 const Section = styled.section`
   width: 100%;
   background-color: #fff6f2;
-  padding: 4rem 6rem 10rem;
+  padding: 7rem 6rem 10rem;
 
   @media (max-width: 700px) {
-    padding: 3rem 1.5rem 6rem;
+    padding: 5rem 1.5rem 6rem;
   }
 `;
 

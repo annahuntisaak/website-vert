@@ -16,7 +16,7 @@ const Inner = styled.div`
   padding: 6rem 2rem;
 
   @media (max-width: 700px) {
-    padding: 0.5rem 1.5rem 4rem;
+    padding: 5rem 1.5rem 4rem;
   }
 `;
 

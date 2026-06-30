@@ -7,13 +7,14 @@ import ExperienceSection from './ExperienceSection';
 import TraditionalArtSection from './TraditionalArtSection';
 import PhotographySection from './PhotographySection';
 import ContactSection from './ContactSection';
+
 // Pulled up by 100vh so it starts sliding into view from the bottom
 // as soon as the user begins scrolling the hero. z-index: 1 ensures it
 // paints in front of the sticky hero (which has no stacking context).
 const ContentSections = styled.div`
   position: relative;
   z-index: 1;
-  margin-top: calc(-100vw * 1975 / 2113);
+  margin-top: calc(-100vw * 1983 / 2992);
   display: flex;
   flex-direction: column;
   align-items: center;

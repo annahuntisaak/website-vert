@@ -1,13 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
 import homeImg from '../../../assets/home.jpg';
+import homeImgWhiteSpace from '../../../assets/home_white_space.jpg';
 import LandingTitle from '../../molecule/LandingTitle';
 
-// Hero natural height at full viewport width = 100vw * (1975/2113).
+// Hero natural height at full viewport width = 100vw * (1983/2992).
 // StickyWrapper must be 2x that so the hero sticks for exactly one hero-height
 // of scrolling before ContentSections fully covers it.
 const StickyWrapper = styled.div`
-  height: calc(100vw * 1975 / 2113 * 2);
+  height: calc(100vw * 1983 / 2992 * 2);
 `;
 
 // position: sticky keeps the image locked at the top while scrolling.
@@ -31,7 +32,7 @@ const HeroImg = styled.img`
 
 const TitleOverlay = styled.div`
   position: absolute;
-  top: 50%;
+  top: 38%;
   left: 50%;
   transform: translate(-50%, -50%);
   pointer-events: none;
@@ -43,7 +44,7 @@ const HomeSection = () => {
       <StickyWrapper>
         <Hero>
           <HeroInner>
-            <HeroImg src={homeImg} alt="Home" />
+            <HeroImg src={homeImgWhiteSpace} alt="Home" />
             <TitleOverlay>
               <LandingTitle />
             </TitleOverlay>

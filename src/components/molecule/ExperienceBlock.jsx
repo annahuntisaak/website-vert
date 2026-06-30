@@ -38,6 +38,10 @@ const ResumeButton = styled.button`
   &:hover {
     background: rgba(81, 56, 46, 0.18);
   }
+
+  @media (max-width: 700px) {
+    margin-bottom: 2.5rem;
+  }
 `;
 
 const Timeline = styled.div`
