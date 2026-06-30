@@ -30,14 +30,13 @@ const IconRow = styled.div`
 `;
 
 const EmailText = styled.span`
-  color: rgba(255, 246, 242, 0.45);
-  font-size: 13px;
-  letter-spacing: 0.08em;
+  color: #fff6f2;
+  font-size: 14px;
   cursor: copy;
   user-select: none;
 
   &:hover {
-    color: rgba(255, 246, 242, 0.65);
+    color: rgba(255, 246, 242, 0.75);
   }
 `;
 
@@ -66,10 +65,10 @@ const Socials = () => {
         <a href="https://www.instagram.com/annameigui/" target="_blank" rel="noreferrer">
           <FontAwesomeIcon icon={faInstagram} />
         </a>
-        <EmailText onClick={handleCopy} title="Click to copy">
-          {EMAIL}
-        </EmailText>
       </IconRow>
+      <EmailText onClick={handleCopy} title="Click to copy">
+        {EMAIL}
+      </EmailText>
       {copied && <Tooltip>copied</Tooltip>}
     </Wrapper>
   );
