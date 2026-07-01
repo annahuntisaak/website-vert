@@ -24,7 +24,7 @@ const TraditionalArtSection = () => {
   return (
     <Outer id="traditional-art">
       <Inner>
-        <SectionTitleImage src="/titles/traditional-art.png" alt="Traditional Art" />
+        <SectionTitleImage src="/titles/traditional-art.png" alt="Artwork" />
         <TraditionalArtBlock />
       </Inner>
     </Outer>

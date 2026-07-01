@@ -24,7 +24,7 @@ const ExperienceSection = () => {
   return (
     <Outer id="experience">
       <Inner>
-        <SectionTitleImage src="/titles/experience.png" alt="Experience" />
+        <SectionTitleImage src="/titles/experience.png" alt="Research Experience" />
         <ExperienceBlock />
       </Inner>
     </Outer>
