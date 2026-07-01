@@ -65,10 +65,10 @@ const Socials = () => {
         <a href="https://www.instagram.com/annameigui/" target="_blank" rel="noreferrer">
           <FontAwesomeIcon icon={faInstagram} />
         </a>
+        <EmailText onClick={handleCopy} title="Click to copy">
+          {EMAIL}
+        </EmailText>
       </IconRow>
-      <EmailText onClick={handleCopy} title="Click to copy">
-        {EMAIL}
-      </EmailText>
       {copied && <Tooltip>copied</Tooltip>}
     </Wrapper>
   );
