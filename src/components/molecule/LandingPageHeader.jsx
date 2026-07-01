@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 
 // ── Desktop nav ──────────────────────────────────────────────────────────────
@@ -12,10 +12,6 @@ const NavWrapper = styled.div`
   justify-content: center;
   z-index: 100;
   pointer-events: none;
-
-  @media (max-width: 700px) {
-    display: none;
-  }
 `;
 
 const NavPill = styled.nav`
@@ -28,6 +24,7 @@ const NavPill = styled.nav`
   border-radius: 50px;
   box-shadow: 0 2px 18px rgba(0, 0, 0, 0.07);
   pointer-events: auto;
+  white-space: nowrap;
 
   a {
     text-decoration: none;
@@ -42,15 +39,10 @@ const NavPill = styled.nav`
 // ── Mobile hamburger ──────────────────────────────────────────────────────────
 
 const MobileNav = styled.div`
-  display: none;
   position: fixed;
   top: 1.25rem;
   left: 1.25rem;
   z-index: 100;
-
-  @media (max-width: 700px) {
-    display: block;
-  }
 `;
 
 const HamburgerBtn = styled.button`
@@ -67,6 +59,7 @@ const HamburgerBtn = styled.button`
   border-radius: 50%;
   border: none;
   box-shadow: 0 2px 18px rgba(0, 0, 0, 0.07);
+  cursor: pointer;
 `;
 
 const Bar = styled.span`
@@ -114,32 +107,39 @@ const Dropdown = styled.div`
 // ── Sections ──────────────────────────────────────────────────────────────────
 
 const sections = [
-  { label: 'Home',          id: 'home' },
-  { label: 'About',         id: 'about' },
-  { label: 'Experience',    id: 'experience' },
+  { label: 'Home',            id: 'home' },
+  { label: 'About',           id: 'about' },
+  { label: 'Experience',      id: 'experience' },
   { label: 'Traditional Art', id: 'traditional-art' },
-  { label: 'Photography',   id: 'photography' },
-  { label: 'Contact',       id: 'contact' },
+  { label: 'Photography',     id: 'photography' },
+  { label: 'Contact',         id: 'contact' },
 ];
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
 const LandingPageHeader = () => {
   const [open, setOpen] = useState(false);
+  const [useMobile, setUseMobile] = useState(false);
   const mobileRef = useRef(null);
+  const pillRef = useRef(null);
 
-  const scrollTo = (e, id) => {
-    e.preventDefault();
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-  };
+  // Switch to hamburger the moment the pill would overflow the viewport
+  useLayoutEffect(() => {
+    const check = () => {
+      if (!pillRef.current) return;
+      setUseMobile(pillRef.current.scrollWidth > window.innerWidth - 32);
+    };
+    check();
+    const ro = new ResizeObserver(check);
+    ro.observe(document.body);
+    return () => ro.disconnect();
+  }, []);
 
   // Close dropdown when clicking outside
   useEffect(() => {
     if (!open) return;
     const onDown = (e) => {
-      if (mobileRef.current && !mobileRef.current.contains(e.target)) {
-        setOpen(false);
-      }
+      if (mobileRef.current && !mobileRef.current.contains(e.target)) setOpen(false);
     };
     document.addEventListener('mousedown', onDown);
     document.addEventListener('touchstart', onDown);
@@ -149,11 +149,19 @@ const LandingPageHeader = () => {
     };
   }, [open]);
 
+  const scrollTo = (e, id) => {
+    e.preventDefault();
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <>
-      {/* Desktop */}
-      <NavWrapper data-header>
-        <NavPill>
+      {/* Desktop pill — always mounted so its natural width can be measured */}
+      <NavWrapper
+        data-header
+        style={useMobile ? { visibility: 'hidden', pointerEvents: 'none' } : {}}
+      >
+        <NavPill ref={pillRef}>
           {sections.map(({ label, id }) => (
             <a key={id} href={`#${id}`} onClick={(e) => scrollTo(e, id)}>
               {label}
@@ -162,27 +170,29 @@ const LandingPageHeader = () => {
         </NavPill>
       </NavWrapper>
 
-      {/* Mobile */}
-      <MobileNav data-header ref={mobileRef}>
-        <HamburgerBtn onClick={() => setOpen((o) => !o)} aria-label="Menu">
-          <Bar />
-          <Bar />
-          <Bar />
-        </HamburgerBtn>
-        {open && (
-          <Dropdown>
-            {sections.map(({ label, id }) => (
-              <a
-                key={id}
-                href={`#${id}`}
-                onClick={(e) => { scrollTo(e, id); setOpen(false); }}
-              >
-                {label}
-              </a>
-            ))}
-          </Dropdown>
-        )}
-      </MobileNav>
+      {/* Mobile hamburger */}
+      {useMobile && (
+        <MobileNav data-header ref={mobileRef}>
+          <HamburgerBtn onClick={() => setOpen((o) => !o)} aria-label="Menu">
+            <Bar />
+            <Bar />
+            <Bar />
+          </HamburgerBtn>
+          {open && (
+            <Dropdown>
+              {sections.map(({ label, id }) => (
+                <a
+                  key={id}
+                  href={`#${id}`}
+                  onClick={(e) => { scrollTo(e, id); setOpen(false); }}
+                >
+                  {label}
+                </a>
+              ))}
+            </Dropdown>
+          )}
+        </MobileNav>
+      )}
     </>
   );
 };
