@@ -1,32 +1,29 @@
 import React from 'react';
 import styled from 'styled-components';
-import homeImg from '../../../assets/home.jpg';
-import homeImgWhiteSpace from '../../../assets/home_white_space.jpg';
 import LandingTitle from '../../molecule/LandingTitle';
 
-// Hero natural height at full viewport width = 100vw * (1983/2992).
-// StickyWrapper must be 2x that so the hero sticks for exactly one hero-height
-// of scrolling before ContentSections fully covers it.
 const StickyWrapper = styled.div`
-  height: calc(100vw * 1983 / 2992 * 2);
+  height: calc(200vh);
 `;
 
-// position: sticky keeps the image locked at the top while scrolling.
-// position: relative allows the title to be absolutely centred over the img.
 const Hero = styled.div`
   position: sticky;
   top: 0;
   width: 100%;
+  height: 100vh;
+  overflow: hidden;
 `;
 
 const HeroInner = styled.div`
   position: relative;
   width: 100%;
+  height: 100%;
 `;
 
-const HeroImg = styled.img`
+const HeroVideo = styled.video`
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
   display: block;
 `;
 
@@ -44,7 +41,13 @@ const HomeSection = () => {
       <StickyWrapper>
         <Hero>
           <HeroInner>
-            <HeroImg src={homeImgWhiteSpace} alt="Home" />
+            <HeroVideo
+              src="/hero.mp4"
+              autoPlay
+              muted
+              loop
+              playsInline
+            />
             <TitleOverlay>
               <LandingTitle />
             </TitleOverlay>

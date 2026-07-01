@@ -13,10 +13,10 @@ const Outer = styled.section`
 const Inner = styled.div`
   width: 100%;
   max-width: 900px;
-  padding: 6rem 2rem;
+  padding: 8rem 2rem 6rem;
 
   @media (max-width: 700px) {
-    padding: 5rem 1.5rem 4rem;
+    padding: 6rem 1.5rem 4rem;
   }
 `;
 
@@ -24,7 +24,7 @@ const ExperienceSection = () => {
   return (
     <Outer id="experience">
       <Inner>
-        <SectionTitleImage src="/titles/experience.png" alt="Research Experience" />
+        <SectionTitleImage src="/titles/experience.png" alt="Research Experience" $mb="5rem" />
         <ExperienceBlock />
       </Inner>
     </Outer>

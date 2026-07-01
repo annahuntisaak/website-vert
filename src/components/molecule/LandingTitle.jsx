@@ -1,8 +1,9 @@
 import React, { useRef, useLayoutEffect, useState, useCallback } from 'react';
 import styled, { keyframes } from 'styled-components';
+import bokehImg from '../../assets/bokeh.jpg';
 
 const MAX_FONT_REM = 8;
-const MIN_LINE_PX   = 24; // hide rules if they'd be shorter than this
+const MIN_LINE_PX  = 24;
 
 const slideUp = keyframes`
   from { opacity: 0; transform: translateY(12px); }
@@ -14,8 +15,9 @@ const Wrapper = styled.div`
 `;
 
 const Name = styled.h1`
-  font-family: 'Cormorant', serif;
-  font-weight: 700;
+  font-family: 'novantique-serif-display', sans-serif;
+  font-weight: 300;
+  font-style: normal;
   line-height: 1.1;
   letter-spacing: 0.02em;
   margin-bottom: 2.5rem;
@@ -25,8 +27,18 @@ const AnimLine = styled.span`
   display: block;
   width: fit-content;
   margin: 0 auto;
+  white-space: nowrap;
   animation: ${slideUp} 0.7s ease-out both;
   animation-delay: ${props => props.$delay}s;
+`;
+
+const InlinePhoto = styled.img`
+  display: inline-block;
+  height: 0.75em;
+  width: auto;
+  vertical-align: baseline;
+  object-fit: cover;
+  margin: 0 0.06em;
 `;
 
 const CaptionRow = styled.div`
@@ -52,17 +64,16 @@ const CaptionText = styled.span`
 `;
 
 const LandingTitle = () => {
-  const line1Ref      = useRef(null);
-  const line2Ref      = useRef(null);
-  const captionRef    = useRef(null);
-  const [fontSize,    setFontSize]    = useState(MAX_FONT_REM);
-  const [titleWidth,  setTitleWidth]  = useState(0);
-  const [showRules,   setShowRules]   = useState(false);
+  const line1Ref   = useRef(null);
+  const line2Ref   = useRef(null);
+  const captionRef = useRef(null);
+  const [fontSize,   setFontSize]   = useState(MAX_FONT_REM);
+  const [titleWidth, setTitleWidth] = useState(0);
+  const [showRules,  setShowRules]  = useState(false);
 
   const measure = useCallback(() => {
     if (!line1Ref.current || !line2Ref.current || !captionRef.current) return;
 
-    // Current rendered widths
     const w1 = line1Ref.current.getBoundingClientRect().width;
     const w2 = line2Ref.current.getBoundingClientRect().width;
     const currentMaxW = Math.max(w1, w2);
@@ -72,12 +83,10 @@ const LandingTitle = () => {
     const available     = window.innerWidth * 0.88;
     const maxFontPx     = MAX_FONT_REM * 16;
 
-    // Scale font so title fills ≤88% of viewport, capped at MAX_FONT_REM
     const targetFontPx  = Math.min(currentFontPx * (available / currentMaxW), maxFontPx);
     const newTitleWidth = currentMaxW * (targetFontPx / currentFontPx);
 
-    // Caption natural width (no rules applied)
-    const captionW = captionRef.current.getBoundingClientRect().width;
+    const captionW  = captionRef.current.getBoundingClientRect().width;
     const ruleSpace = (newTitleWidth - captionW) / 2;
 
     setFontSize(targetFontPx / 16);
@@ -94,7 +103,9 @@ const LandingTitle = () => {
   return (
     <Wrapper>
       <Name style={{ fontSize: `${fontSize}rem` }}>
-        <AnimLine ref={line1Ref} $delay={0}>ANNA ROSE</AnimLine>
+        <AnimLine ref={line1Ref} $delay={0}>
+          {'ANNA'}<InlinePhoto src={bokehImg} alt="" />{'ROSE'}
+        </AnimLine>
         <AnimLine ref={line2Ref} $delay={0.3}>HUNT{'‑'}ISAAK</AnimLine>
       </Name>
       <CaptionRow style={titleWidth ? { width: titleWidth } : undefined}>

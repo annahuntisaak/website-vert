@@ -58,14 +58,18 @@ const Photo = styled.div`
 
 const Title = styled.h2`
   width: fit-content;
-  font-size: 2rem;
-  font-weight: 600;
-  letter-spacing: 0.15em;
+  font-family: 'novantique-serif-display', sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  font-size: 2.5rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1.1;
   margin: 0 0 3.5rem;
   color: #fff6f2;
 
   @media (max-width: ${MOBILE_BREAK}px) {
-    font-size: 1.4rem;
+    font-size: 2rem;
     margin: 0 auto 2rem;
   }
 `;
