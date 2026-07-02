@@ -9,6 +9,8 @@ import PhotographySection from './PhotographySection';
 import ContactSection from './ContactSection';
 
 const ContentSections = styled.div`
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
