@@ -20,15 +20,13 @@ const Inner = styled.div`
   }
 `;
 
-const ExperienceSection = () => {
-  return (
-    <Outer id="experience">
-      <Inner>
-        <SectionTitleImage src="/titles/experience.png" alt="Research Experience" $mb="5rem" />
-        <ExperienceBlock />
-      </Inner>
-    </Outer>
-  );
-};
+const ExperienceSection = () => (
+  <Outer id="experience">
+    <Inner>
+      <SectionTitleImage src="/titles/experience.png" alt="Research Experience" $mb="5rem" />
+      <ExperienceBlock />
+    </Inner>
+  </Outer>
+);
 
 export default ExperienceSection;

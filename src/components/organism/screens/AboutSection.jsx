@@ -97,10 +97,7 @@ const AboutSection = () => {
     const W = innerRef.current.clientWidth - padLeft - padRight;
     const T = titleRef.current.offsetWidth;
 
-    // How far the content column sits from Inner's content-area left edge
     const contentColFromInnerContent = Math.max(0, (W - T) / 2);
-
-    // Same distance measured from Outer's left edge
     const contentColFromOuter =
       (innerRect.left - outerRect.left) + padLeft + contentColFromInnerContent;
 

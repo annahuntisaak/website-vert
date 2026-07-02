@@ -55,17 +55,22 @@ const allPhotos = rows.flat();
 const Gallery = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
   width: 100%;
+
+  @media (max-width: 700px) {
+    gap: 16px;
+  }
 `;
 
 const Row = styled.div`
   display: flex;
-  gap: 16px;
+  gap: 8px;
   width: 100%;
 
   @media (max-width: 700px) {
     flex-direction: column;
+    gap: 16px;
   }
 `;
 

@@ -410,12 +410,7 @@ const ExperienceBlock = () => {
                     <img src={eyelinkImg} alt="EyeLink eye-tracking equipment" onLoad={(e) => handleLoad(e, 'eyelink')} />
                   </ImgCell>
                   <HoverImgCell $ratio={ratios.thesis * scale}>
-                    <ImgLink
-                      href={THESIS_URL}
-                      target="_blank"
-                      rel="noreferrer"
-                      onClick={() => download(THESIS_URL, 'thesis.pdf')}
-                    >
+                    <ImgLink href={THESIS_URL} target="_blank" rel="noreferrer" onClick={() => download(THESIS_URL, 'thesis.pdf')}>
                       <img src={thesisCoverImg} alt="Thesis cover" onLoad={(e) => handleLoad(e, 'thesis')} />
                     </ImgLink>
                     <ImgHoverLabel>
@@ -459,15 +454,11 @@ const ExperienceBlock = () => {
                 <>
                   <HoverImgCell $ratio={ratios.first * scale} onClick={() => setActiveIndex(0)}>
                     <img src={firstImg} alt="Slide deck" onLoad={(e) => handleLoad(e, 'first')} />
-                    <ImgHoverLabel>
-                      <ExpandIcon />
-                    </ImgHoverLabel>
+                    <ImgHoverLabel><ExpandIcon /></ImgHoverLabel>
                   </HoverImgCell>
                   <HoverImgCell $ratio={ratios.poster * scale} onClick={() => setActiveIndex(1)}>
                     <img src={posterImg} alt="Poster" onLoad={(e) => handleLoad(e, 'poster')} />
-                    <ImgHoverLabel>
-                      <ExpandIcon />
-                    </ImgHoverLabel>
+                    <ImgHoverLabel><ExpandIcon /></ImgHoverLabel>
                   </HoverImgCell>
                 </>
               );
@@ -562,10 +553,7 @@ const ExperienceBlock = () => {
             />
           )}
           <LightboxContent onClick={(e) => e.stopPropagation()}>
-            <LightboxImg
-              src={crookImages[activeIndex].src}
-              alt={crookImages[activeIndex].alt}
-            />
+            <LightboxImg src={crookImages[activeIndex].src} alt={crookImages[activeIndex].alt} />
             <DownloadBtn
               aria-label="Download"
               onClick={() => download(crookImages[activeIndex].downloadUrl, crookImages[activeIndex].downloadName)}
