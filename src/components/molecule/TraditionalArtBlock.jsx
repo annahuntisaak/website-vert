@@ -1,11 +1,11 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
-import les from '../../assets/les.jpeg';
-import line from '../../assets/line.jpg';
-import driveway from '../../assets/driveway.jpeg';
-import pools from '../../assets/pools.jpg';
-import hand from '../../assets/hand.jpg';
-import still from '../../assets/still.jpg';
+import les from '../../assets/les.webp';
+import line from '../../assets/line.webp';
+import driveway from '../../assets/driveway.webp';
+import pools from '../../assets/pools.webp';
+import hand from '../../assets/hand.webp';
+import still from '../../assets/still.webp';
 
 // Each piece has a src and a lines array — one string per caption line.
 const rows = [
@@ -233,6 +233,8 @@ const TraditionalArtBlock = () => {
                   <Img
                     src={piece.src}
                     alt={piece.lines.join(', ')}
+                    loading="lazy"
+                    decoding="async"
                     onLoad={(e) => handleLoad(e, piece.src)}
                   />
                   <HoverLabel>

@@ -1,33 +1,33 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 
-import annex from '../../assets/annex.jpg';
-import backyard from '../../assets/backyard.jpg';
-import beach from '../../assets/beach.jpg';
-import bottle from '../../assets/bottle.jpg';
-import cat from '../../assets/cat.jpg';
-import chair from '../../assets/chair.jpg';
-import golden from '../../assets/golden.jpg';
-import grammy from '../../assets/grammy.jpg';
-import house from '../../assets/house.jpg';
-import kitchen from '../../assets/kitchen.jpg';
-import mountain from '../../assets/mountain.jpg';
-import mtl_night from '../../assets/mtl_night.jpg';
-import museum_dark from '../../assets/museum_dark.jpg';
-import museum_light from '../../assets/museum_light.jpg';
-import noah_stairs from '../../assets/noah_stairs.jpg';
-import one_tree from '../../assets/one_tree.jpg';
-import plants from '../../assets/plants.jpg';
-import pond from '../../assets/pond.jpg';
-import street from '../../assets/street.jpg';
-import sunset from '../../assets/sunset.jpg';
-import tea from '../../assets/tea.jpg';
-import tree_water from '../../assets/tree_water.jpg';
-import trees from '../../assets/trees.jpg';
-import trinity from '../../assets/trinity.jpg';
-import village from '../../assets/village.jpg';
-import wedding from '../../assets/wedding.jpg';
-import zoe from '../../assets/zoe.jpg';
+import annex from '../../assets/annex.webp';
+import backyard from '../../assets/backyard.webp';
+import beach from '../../assets/beach.webp';
+import bottle from '../../assets/bottle.webp';
+import cat from '../../assets/cat.webp';
+import chair from '../../assets/chair.webp';
+import golden from '../../assets/golden.webp';
+import grammy from '../../assets/grammy.webp';
+import house from '../../assets/house.webp';
+import kitchen from '../../assets/kitchen.webp';
+import mountain from '../../assets/mountain.webp';
+import mtl_night from '../../assets/mtl_night.webp';
+import museum_dark from '../../assets/museum_dark.webp';
+import museum_light from '../../assets/museum_light.webp';
+import noah_stairs from '../../assets/noah_stairs.webp';
+import one_tree from '../../assets/one_tree.webp';
+import plants from '../../assets/plants.webp';
+import pond from '../../assets/pond.webp';
+import street from '../../assets/street.webp';
+import sunset from '../../assets/sunset.webp';
+import tea from '../../assets/tea.webp';
+import tree_water from '../../assets/tree_water.webp';
+import trees from '../../assets/trees.webp';
+import trinity from '../../assets/trinity.webp';
+import village from '../../assets/village.webp';
+import wedding from '../../assets/wedding.webp';
+import zoe from '../../assets/zoe.webp';
 
 const p = (src, title) => ({ src, title });
 
@@ -263,6 +263,8 @@ const PhotographyBlock = () => {
                     <Img
                       src={photo.src}
                       alt={photo.title}
+                      loading="lazy"
+                      decoding="async"
                       onLoad={(e) => handleLoad(e, photo.title)}
                     />
                     <HoverLabel />
