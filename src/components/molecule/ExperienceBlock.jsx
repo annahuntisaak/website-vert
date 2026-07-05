@@ -205,6 +205,10 @@ const ImgCell = styled.div`
 const HoverImgCell = styled.div`
   flex: ${(props) => props.$ratio};
   position: relative;
+  ${p => p.$hoverable && `
+    box-shadow: 0 3px 16px rgba(68, 33, 9, 0.08);
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+  `}
 
   img {
     width: 100%;
@@ -221,6 +225,13 @@ const HoverImgCell = styled.div`
     opacity: 1;
   }
 
+  ${p => p.$hoverable && `
+    &:hover {
+      transform: scale(1.025);
+      box-shadow: 0 6px 24px rgba(68, 33, 9, 0.18);
+    }
+  `}
+
   @media (max-width: 700px) {
     flex: none;
     width: 100%;
@@ -230,6 +241,13 @@ const HoverImgCell = styled.div`
 const ImgLink = styled.a`
   display: block;
   cursor: pointer;
+  box-shadow: 0 3px 16px rgba(68, 33, 9, 0.08);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+
+  &:hover {
+    transform: scale(1.025);
+    box-shadow: 0 6px 24px rgba(68, 33, 9, 0.18);
+  }
 `;
 
 const ImgHoverLabel = styled.div`
@@ -545,11 +563,11 @@ const ExperienceBlock = () => {
             const scale = total < 1 ? 1 / total : 1;
             return (
               <>
-                <HoverImgCell $ratio={ratios.first * scale} onClick={() => setActiveIndex(0)}>
+                <HoverImgCell $hoverable $ratio={ratios.first * scale} onClick={() => setActiveIndex(0)}>
                   <img src={firstImg} alt="Slide deck" loading="lazy" decoding="async" onLoad={(e) => handleLoad(e, 'first')} />
                   <ImgHoverLabel><ExpandIcon /></ImgHoverLabel>
                 </HoverImgCell>
-                <HoverImgCell $ratio={ratios.poster * scale} onClick={() => setActiveIndex(1)}>
+                <HoverImgCell $hoverable $ratio={ratios.poster * scale} onClick={() => setActiveIndex(1)}>
                   <img src={posterImg} alt="Poster" loading="lazy" decoding="async" onLoad={(e) => handleLoad(e, 'poster')} />
                   <ImgHoverLabel><ExpandIcon /></ImgHoverLabel>
                 </HoverImgCell>
