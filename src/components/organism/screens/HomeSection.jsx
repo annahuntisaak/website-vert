@@ -89,7 +89,7 @@ const BottomGroup = styled.div`
   left: 3rem;
   top: 50%;
   z-index: 1;
-  color: #aebec4;
+  color: rgb(81, 56, 46);
   mix-blend-mode: difference;
 
   @media (max-width: ${BREAK}) {
@@ -116,11 +116,13 @@ const Caption = styled.div`
   font-weight: 500;
   letter-spacing: 0.1em;
   margin-top: 1.5rem;
+  color: #aebec4;
   animation: ${slideUp} 1.2s ease-out both;
   animation-delay: 1.0s;
 
   @media (max-width: ${BREAK}) {
     margin-top: 2rem;
+    color: inherit;
   }
 `;
 
