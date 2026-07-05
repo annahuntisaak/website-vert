@@ -31,6 +31,8 @@ const Hero = styled.div`
     align-items: center;
     justify-content: center;
     gap: 2rem;
+    padding: 2.5rem 0;
+    box-sizing: border-box;
   }
 `;
 
@@ -110,7 +112,7 @@ const Caption = styled.div`
   animation-delay: 1.0s;
 
   @media (max-width: ${BREAK}) {
-    margin-top: 1.1rem;
+    margin-top: 2rem;
   }
 `;
 
@@ -159,8 +161,9 @@ const HomeSection = () => {
     const rootFontPx   = parseFloat(getComputedStyle(document.documentElement).fontSize);
     const gapPx        = 2 * rootFontPx;
 
+    const vertCushion = 2.5 * rootFontPx;
     const imgHAtTextW = textWidth / aspectRatio;
-    const availableH  = window.innerHeight - topH - gapPx * 2 - bottomGroupH;
+    const availableH  = window.innerHeight - 2 * vertCushion - topH - gapPx * 2 - bottomGroupH;
 
     const finalWidth = imgHAtTextW <= availableH
       ? textWidth
