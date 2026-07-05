@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import eyelinkImg from '../../assets/eyelink.webp';
 import firstImg from '../../assets/first.webp';
@@ -8,6 +8,8 @@ import thesisCoverImg from '../../assets/thesis_cover.png';
 const SLIDE_DECK_URL = '/slides.pdf';
 const THESIS_URL = '/thesis.pdf';
 const RESUME_URL = '/resume.pdf';
+
+const NUM_ENTRIES = 4;
 
 const crookImages = [
   { src: firstImg,  alt: 'Slide deck', downloadUrl: SLIDE_DECK_URL, downloadName: 'slides.pdf' },
@@ -65,6 +67,9 @@ const YearLabel = styled.div`
   padding-right: 0.9rem;
   padding-top: 0;
   line-height: 1;
+  opacity: ${p => p.$show ? 1 : 0};
+  transform: ${p => p.$show ? 'translateY(0)' : 'translateY(10px)'};
+  transition: opacity 0.7s ease, transform 0.7s ease;
 
   @media (max-width: 700px) {
     display: ${(p) => (p.$hasYear ? 'flex' : 'none')};
@@ -103,6 +108,8 @@ const Dot = styled.div`
   background-color: rgb(81, 56, 46);
   flex-shrink: 0;
   margin-top: 3px;
+  opacity: ${p => p.$show ? 1 : 0};
+  transition: opacity 0.6s ease;
 `;
 
 const VertLine = styled.div`
@@ -112,6 +119,9 @@ const VertLine = styled.div`
   min-height: 0.5rem;
   margin-top: ${(p) => p.$mt ?? '6px'};
   margin-bottom: ${(p) => p.$mb ?? '6px'};
+  transform-origin: top center;
+  transform: ${p => p.$show ? 'scaleY(1)' : 'scaleY(0)'};
+  transition: transform 1.3s ease;
 `;
 
 const ContentCell = styled.div`
@@ -124,6 +134,30 @@ const ContentCell = styled.div`
     padding-left: 0;
     padding-bottom: 2rem;
   }
+`;
+
+const HeaderGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  opacity: ${p => p.$show ? 1 : 0};
+  transform: ${p => p.$show ? 'translateY(0)' : 'translateY(10px)'};
+  transition: opacity 0.7s ease, transform 0.7s ease;
+`;
+
+const BodyGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  opacity: ${p => p.$show ? 1 : 0};
+  transform: ${p => p.$show ? 'translateY(0)' : 'translateY(10px)'};
+  transition: opacity 1.8s ease, transform 1.8s ease;
+`;
+
+const ImageGroup = styled.div`
+  opacity: ${p => p.$show ? 1 : 0};
+  transform: ${p => p.$show ? 'translateY(0)' : 'translateY(10px)'};
+  transition: opacity 1.2s ease, transform 1.2s ease;
 `;
 
 const LabName = styled.h3`
@@ -357,12 +391,62 @@ const download = (url, filename) => {
 const ExperienceBlock = () => {
   const [ratios, setRatios] = useState({ eyelink: 1.5, thesis: 1.5, first: 1.5, poster: 1.5 });
   const [activeIndex, setActiveIndex] = useState(null);
+  const [revealed, setRevealed] = useState(
+    () => Array.from({ length: NUM_ENTRIES }, () => ({ header: false, body: false, images: false }))
+  );
+  const cellRefs = useRef([]);
 
   const handleLoad = useCallback((e, key) => {
     const { naturalWidth, naturalHeight } = e.target;
     if (naturalWidth && naturalHeight) {
       setRatios((prev) => ({ ...prev, [key]: naturalWidth / naturalHeight }));
     }
+  }, []);
+
+  useEffect(() => {
+    const BODY_DELAY = 500;
+    const IMAGE_DELAY = BODY_DELAY + 400;
+    // How long after a primary entry's header before its continuation entry starts.
+    const CONTINUATION_DELAY = BODY_DELAY + 1200;
+
+    // Entries with showDot===false are continuations — skip the observer and
+    // let their preceding entry trigger them sequentially instead.
+    const IS_CONTINUATION = [false, false, false, true];
+
+    const observers = [];
+    const timeouts = [];
+
+    const triggerEntry = (i) => {
+      setRevealed(prev => prev.map((r, j) => j === i ? { ...r, header: true } : r));
+      timeouts.push(setTimeout(() => {
+        setRevealed(prev => prev.map((r, j) => j === i ? { ...r, body: true } : r));
+      }, BODY_DELAY));
+      timeouts.push(setTimeout(() => {
+        setRevealed(prev => prev.map((r, j) => j === i ? { ...r, images: true } : r));
+      }, IMAGE_DELAY));
+      if (i + 1 < NUM_ENTRIES && IS_CONTINUATION[i + 1]) {
+        timeouts.push(setTimeout(() => {
+          triggerEntry(i + 1);
+        }, CONTINUATION_DELAY));
+      }
+    };
+
+    cellRefs.current.forEach((el, i) => {
+      if (!el || IS_CONTINUATION[i]) return;
+      const obs = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) {
+          triggerEntry(i);
+          obs.disconnect();
+        }
+      }, { threshold: 0, rootMargin: '0px 0px -120px 0px' });
+      obs.observe(el);
+      observers.push(obs);
+    });
+
+    return () => {
+      observers.forEach(o => o.disconnect());
+      timeouts.forEach(clearTimeout);
+    };
   }, []);
 
   useEffect(() => {
@@ -390,99 +474,109 @@ const ExperienceBlock = () => {
       year: '2025',
       pb: '5rem',
       showLine: true,
-      content: (
+      header: (
         <>
           <LabName>Mind, Machines, Body, Brain, and Behavior Lab</LabName>
           <Field>McGill University</Field>
-          <Description>
-            Through eye tracking experiments, we investigated evidence of trans-saccadic information transfer
-            and the mechanisms underlying visual attention and decision-making. This work contributed to the
-            ongoing development of a novel mathematical model of human choice behavior. My honor's thesis on
-            this project is below.
-          </Description>
-          <MediaRow>
-            {(() => {
-              const total = ratios.eyelink + ratios.thesis;
-              const scale = total < 1 ? 1 / total : 1;
-              return (
-                <>
-                  <ImgCell $ratio={ratios.eyelink * scale}>
-                    <img src={eyelinkImg} alt="EyeLink eye-tracking equipment" loading="lazy" decoding="async" onLoad={(e) => handleLoad(e, 'eyelink')} />
-                  </ImgCell>
-                  <HoverImgCell $ratio={ratios.thesis * scale}>
-                    <ImgLink href={THESIS_URL} target="_blank" rel="noreferrer" onClick={() => download(THESIS_URL, 'thesis.pdf')}>
-                      <img src={thesisCoverImg} alt="Thesis cover" loading="lazy" decoding="async" onLoad={(e) => handleLoad(e, 'thesis')} />
-                    </ImgLink>
-                    <ImgHoverLabel>
-                      <svg width="20" height="20" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <line x1="7" y1="1" x2="7" y2="9.5" stroke="rgb(68,33,9)" strokeWidth="1" strokeLinecap="round"/>
-                        <polyline points="4,7 7,10 10,7" fill="none" stroke="rgb(68,33,9)" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-                        <line x1="2" y1="13" x2="12" y2="13" stroke="rgb(68,33,9)" strokeWidth="1" strokeLinecap="round"/>
-                      </svg>
-                    </ImgHoverLabel>
-                  </HoverImgCell>
-                </>
-              );
-            })()}
-          </MediaRow>
         </>
+      ),
+      body: (
+        <Description>
+          Through eye tracking experiments, we investigated evidence of trans-saccadic information transfer
+          and the mechanisms underlying visual attention and decision-making. This work contributed to the
+          ongoing development of a novel mathematical model of human choice behavior. My honor's thesis on
+          this project is below.
+        </Description>
+      ),
+      images: (
+        <MediaRow>
+          {(() => {
+            const total = ratios.eyelink + ratios.thesis;
+            const scale = total < 1 ? 1 / total : 1;
+            return (
+              <>
+                <ImgCell $ratio={ratios.eyelink * scale}>
+                  <img src={eyelinkImg} alt="EyeLink eye-tracking equipment" loading="lazy" decoding="async" onLoad={(e) => handleLoad(e, 'eyelink')} />
+                </ImgCell>
+                <HoverImgCell $ratio={ratios.thesis * scale}>
+                  <ImgLink href={THESIS_URL} target="_blank" rel="noreferrer" onClick={() => download(THESIS_URL, 'thesis.pdf')}>
+                    <img src={thesisCoverImg} alt="Thesis cover" loading="lazy" decoding="async" onLoad={(e) => handleLoad(e, 'thesis')} />
+                  </ImgLink>
+                  <ImgHoverLabel>
+                    <svg width="20" height="20" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <line x1="7" y1="1" x2="7" y2="9.5" stroke="rgb(68,33,9)" strokeWidth="1" strokeLinecap="round"/>
+                      <polyline points="4,7 7,10 10,7" fill="none" stroke="rgb(68,33,9)" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
+                      <line x1="2" y1="13" x2="12" y2="13" stroke="rgb(68,33,9)" strokeWidth="1" strokeLinecap="round"/>
+                    </svg>
+                  </ImgHoverLabel>
+                </HoverImgCell>
+              </>
+            );
+          })()}
+        </MediaRow>
       ),
     },
     {
       year: '2024',
       pb: '5rem',
       showLine: true,
-      content: (
+      header: (
         <>
           <LabName>Crook Lab</LabName>
           <Field>National Science Foundation: Precision Microbiome Engineering</Field>
-          <Description>
-            We explored a designer plasmid and recombination-based system of genome editing in
-            Enterobacter ludwigii, with the long-term goal of ultimately engineering this
-            bacterial species to possess greater probiotic/antimicrobial characteristics. I
-            developed a data analysis pipeline for identifying candidate locations for gene
-            insertion and determining potential downstream effects of insertions. This work
-            streamlined our subsequent wet lab experiments, enabling us to focus on three
-            specific target locations. If you're interested in further details regarding this
-            project, you can view the associated slide deck and poster below.
-          </Description>
-          <MediaRow>
-            {(() => {
-              const total = ratios.first + ratios.poster;
-              const scale = total < 1 ? 1 / total : 1;
-              return (
-                <>
-                  <HoverImgCell $ratio={ratios.first * scale} onClick={() => setActiveIndex(0)}>
-                    <img src={firstImg} alt="Slide deck" loading="lazy" decoding="async" onLoad={(e) => handleLoad(e, 'first')} />
-                    <ImgHoverLabel><ExpandIcon /></ImgHoverLabel>
-                  </HoverImgCell>
-                  <HoverImgCell $ratio={ratios.poster * scale} onClick={() => setActiveIndex(1)}>
-                    <img src={posterImg} alt="Poster" loading="lazy" decoding="async" onLoad={(e) => handleLoad(e, 'poster')} />
-                    <ImgHoverLabel><ExpandIcon /></ImgHoverLabel>
-                  </HoverImgCell>
-                </>
-              );
-            })()}
-          </MediaRow>
         </>
+      ),
+      body: (
+        <Description>
+          We explored a designer plasmid and recombination-based system of genome editing in
+          Enterobacter ludwigii, with the long-term goal of ultimately engineering this
+          bacterial species to possess greater probiotic/antimicrobial characteristics. I
+          developed a data analysis pipeline for identifying candidate locations for gene
+          insertion and determining potential downstream effects of insertions. This work
+          streamlined our subsequent wet lab experiments, enabling us to focus on three
+          specific target locations. If you're interested in further details regarding this
+          project, you can view the associated slide deck and poster below.
+        </Description>
+      ),
+      images: (
+        <MediaRow>
+          {(() => {
+            const total = ratios.first + ratios.poster;
+            const scale = total < 1 ? 1 / total : 1;
+            return (
+              <>
+                <HoverImgCell $ratio={ratios.first * scale} onClick={() => setActiveIndex(0)}>
+                  <img src={firstImg} alt="Slide deck" loading="lazy" decoding="async" onLoad={(e) => handleLoad(e, 'first')} />
+                  <ImgHoverLabel><ExpandIcon /></ImgHoverLabel>
+                </HoverImgCell>
+                <HoverImgCell $ratio={ratios.poster * scale} onClick={() => setActiveIndex(1)}>
+                  <img src={posterImg} alt="Poster" loading="lazy" decoding="async" onLoad={(e) => handleLoad(e, 'poster')} />
+                  <ImgHoverLabel><ExpandIcon /></ImgHoverLabel>
+                </HoverImgCell>
+              </>
+            );
+          })()}
+        </MediaRow>
       ),
     },
     {
       year: '2023',
       pb: '2rem',
       showLine: true,
-      content: (
+      header: (
         <>
           <LabName>Dahan Lab</LabName>
           <Field>University of Pennsylvania</Field>
-          <Description>
-            We assessed conversational response patterns of participants engaged in a strategic,
-            cooperation-based task to explore internal representations of implicit information
-            and goals held by their task partner and/or shared between them. I contributed to
-            the processing, computational analysis, and theoretical interpretation of auditory
-            linguistic data, utilizing ELAN annotation software and R scripting.
-          </Description>
         </>
+      ),
+      body: (
+        <Description>
+          We assessed conversational response patterns of participants engaged in a strategic,
+          cooperation-based task to explore internal representations of implicit information
+          and goals held by their task partner and/or shared between them. I contributed to
+          the processing, computational analysis, and theoretical interpretation of auditory
+          linguistic data, utilizing ELAN annotation software and R scripting.
+        </Description>
       ),
     },
     {
@@ -490,17 +584,19 @@ const ExperienceBlock = () => {
       showDot: false,
       pb: '0',
       showLine: true,
-      content: (
+      header: (
         <>
           <LabName>Penn Computational Cognitive Neuroscience Lab</LabName>
           <Field>University of Pennsylvania</Field>
-          <Description>
-            I gained foundational knowledge of conducting human subjects research, from experimental
-            design (including the use of PsychoPy to design visual stimuli) to participant
-            recruitment and data collection. This work centered on the processes of learning,
-            memory, and the integration of new information with prior knowledge.
-          </Description>
         </>
+      ),
+      body: (
+        <Description>
+          I gained foundational knowledge of conducting human subjects research, from experimental
+          design (including the use of PsychoPy to design visual stimuli) to participant
+          recruitment and data collection. This work centered on the processes of learning,
+          memory, and the integration of new information with prior knowledge.
+        </Description>
       ),
     },
   ];
@@ -520,20 +616,41 @@ const ExperienceBlock = () => {
       <Timeline>
         {entries.map((entry, i) => {
           const hasDot = entry.showDot !== false;
-          const nextHasDot = i + 1 < entries.length ? entries[i + 1].showDot !== false : true;
+          const isNoDot = !hasDot;
+          // When the next entry has no dot, this LineCell spans both rows so
+          // there is a single VertLine element — no split animation points.
+          const nextIsNoDot = i + 1 < entries.length && entries[i + 1].showDot === false;
+          const headerVisible = revealed[i].header;
+          const bodyVisible = revealed[i].body;
           return (
             <React.Fragment key={i}>
-              <YearLabel $hasYear={!!entry.year}>{entry.year}</YearLabel>
-              <LineCell>
-                {hasDot && <Dot />}
-                {entry.showLine && (
-                  <VertLine
-                    $mt={hasDot ? '6px' : '0'}
-                    $mb={nextHasDot ? '6px' : '0'}
-                  />
+              <YearLabel $hasYear={!!entry.year} $show={headerVisible}>
+                {entry.year}
+              </YearLabel>
+              {!isNoDot && (
+                <LineCell style={nextIsNoDot ? { gridRow: 'span 2' } : {}}>
+                  <Dot $show={headerVisible} />
+                  {entry.showLine && (
+                    <VertLine $mt="6px" $mb="6px" $show={bodyVisible} />
+                  )}
+                </LineCell>
+              )}
+              <ContentCell
+                $pb={entry.pb}
+                ref={el => { cellRefs.current[i] = el; }}
+              >
+                <HeaderGroup $show={headerVisible}>
+                  {entry.header}
+                </HeaderGroup>
+                <BodyGroup $show={bodyVisible}>
+                  {entry.body}
+                </BodyGroup>
+                {entry.images && (
+                  <ImageGroup $show={revealed[i].images}>
+                    {entry.images}
+                  </ImageGroup>
                 )}
-              </LineCell>
-              <ContentCell $pb={entry.pb}>{entry.content}</ContentCell>
+              </ContentCell>
             </React.Fragment>
           );
         })}

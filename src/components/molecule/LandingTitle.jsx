@@ -28,13 +28,13 @@ const AnimLine = styled.span`
   width: fit-content;
   margin: 0 auto;
   white-space: nowrap;
-  animation: ${slideUp} 0.7s ease-out both;
+  animation: ${slideUp} 600ms ease-out both;
   animation-delay: ${props => props.$delay}s;
 `;
 
 const InlinePhoto = styled.img`
   display: inline-block;
-  height: 0.75em;
+  height: 1cap;
   width: auto;
   vertical-align: baseline;
   object-fit: cover;
@@ -46,8 +46,8 @@ const CaptionRow = styled.div`
   align-items: center;
   gap: 1rem;
   margin: 0 auto;
-  animation: ${slideUp} 0.7s ease-out both;
-  animation-delay: 0.6s;
+  animation: ${slideUp} 1.2s ease-out both;
+  animation-delay: 1.0s;
 `;
 
 const Rule = styled.div`
@@ -106,7 +106,7 @@ const LandingTitle = () => {
         <AnimLine ref={line1Ref} $delay={0}>
           {'ANNA'}<InlinePhoto src={bokehImg} alt="" />{'ROSE'}
         </AnimLine>
-        <AnimLine ref={line2Ref} $delay={0.3}>HUNT{'‑'}ISAAK</AnimLine>
+        <AnimLine ref={line2Ref} $delay={0.5}>HUNT{'‑'}ISAAK</AnimLine>
       </Name>
       <CaptionRow style={titleWidth ? { width: titleWidth } : undefined}>
         {showRules && <Rule />}
