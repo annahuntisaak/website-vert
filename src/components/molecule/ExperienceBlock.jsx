@@ -1,8 +1,8 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
-import eyelinkImg from '../../assets/eyelink.jpg';
-import firstImg from '../../assets/first.jpg';
-import posterImg from '../../assets/poster.jpg';
+import eyelinkImg from '../../assets/eyelink.webp';
+import firstImg from '../../assets/first.webp';
+import posterImg from '../../assets/poster.webp';
 import thesisCoverImg from '../../assets/thesis_cover.png';
 
 const SLIDE_DECK_URL = '/slides.pdf';
@@ -407,11 +407,11 @@ const ExperienceBlock = () => {
               return (
                 <>
                   <ImgCell $ratio={ratios.eyelink * scale}>
-                    <img src={eyelinkImg} alt="EyeLink eye-tracking equipment" onLoad={(e) => handleLoad(e, 'eyelink')} />
+                    <img src={eyelinkImg} alt="EyeLink eye-tracking equipment" loading="lazy" decoding="async" onLoad={(e) => handleLoad(e, 'eyelink')} />
                   </ImgCell>
                   <HoverImgCell $ratio={ratios.thesis * scale}>
                     <ImgLink href={THESIS_URL} target="_blank" rel="noreferrer" onClick={() => download(THESIS_URL, 'thesis.pdf')}>
-                      <img src={thesisCoverImg} alt="Thesis cover" onLoad={(e) => handleLoad(e, 'thesis')} />
+                      <img src={thesisCoverImg} alt="Thesis cover" loading="lazy" decoding="async" onLoad={(e) => handleLoad(e, 'thesis')} />
                     </ImgLink>
                     <ImgHoverLabel>
                       <svg width="20" height="20" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -453,11 +453,11 @@ const ExperienceBlock = () => {
               return (
                 <>
                   <HoverImgCell $ratio={ratios.first * scale} onClick={() => setActiveIndex(0)}>
-                    <img src={firstImg} alt="Slide deck" onLoad={(e) => handleLoad(e, 'first')} />
+                    <img src={firstImg} alt="Slide deck" loading="lazy" decoding="async" onLoad={(e) => handleLoad(e, 'first')} />
                     <ImgHoverLabel><ExpandIcon /></ImgHoverLabel>
                   </HoverImgCell>
                   <HoverImgCell $ratio={ratios.poster * scale} onClick={() => setActiveIndex(1)}>
-                    <img src={posterImg} alt="Poster" onLoad={(e) => handleLoad(e, 'poster')} />
+                    <img src={posterImg} alt="Poster" loading="lazy" decoding="async" onLoad={(e) => handleLoad(e, 'poster')} />
                     <ImgHoverLabel><ExpandIcon /></ImgHoverLabel>
                   </HoverImgCell>
                 </>

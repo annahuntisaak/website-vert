@@ -1,7 +1,7 @@
 import React, { useRef, useLayoutEffect, useState, useCallback } from 'react';
 import styled from 'styled-components';
 import AboutMe from '../../molecule/AboutMe';
-import aboutImg from '../../../assets/about.jpg';
+import aboutImg from '../../../assets/about.webp';
 
 const GAP = 96; // 6rem — space between photo right edge and content column
 const MOBILE_BREAK = 700;
@@ -118,7 +118,7 @@ const AboutSection = () => {
 
   return (
     <Outer id="about" ref={outerRef}>
-      <MobilePhoto src={aboutImg} alt="Anna Hunt-Isaak" />
+      <MobilePhoto src={aboutImg} alt="Anna Hunt-Isaak" loading="lazy" decoding="async" />
       {photoWidth > 0 && (
         <Photo style={{ width: photoWidth }} />
       )}

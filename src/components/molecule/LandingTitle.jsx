@@ -1,6 +1,6 @@
 import React, { useRef, useLayoutEffect, useState, useCallback } from 'react';
 import styled, { keyframes } from 'styled-components';
-import bokehImg from '../../assets/bokeh.jpg';
+import bokehImg from '../../assets/bokeh.webp';
 
 const MAX_FONT_REM = 8;
 const MIN_LINE_PX  = 24;
