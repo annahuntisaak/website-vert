@@ -52,6 +52,8 @@ const TopLine = styled.div`
   left: 3rem;
   bottom: 50%;
   z-index: 1;
+  color: #aebec4;
+  mix-blend-mode: difference;
   animation: ${slideUp} 600ms ease-out both;
   animation-delay: 0s;
 
@@ -59,6 +61,8 @@ const TopLine = styled.div`
     position: static;
     font-size: clamp(2.5rem, 11vw, 6rem);
     text-align: center;
+    color: inherit;
+    mix-blend-mode: normal;
   }
 `;
 
@@ -85,10 +89,14 @@ const BottomGroup = styled.div`
   left: 3rem;
   top: 50%;
   z-index: 1;
+  color: #aebec4;
+  mix-blend-mode: difference;
 
   @media (max-width: ${BREAK}) {
     position: static;
     text-align: center;
+    color: inherit;
+    mix-blend-mode: normal;
   }
 `;
 
