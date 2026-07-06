@@ -45,12 +45,14 @@ const titleFont = `
   white-space: nowrap;
 `;
 
+// ── Mobile-only elements ──────────────────────────────────────────────────────
+
 const TopLine = styled.div`
   ${titleFont}
-  font-size: clamp(3rem, 13vw, 16rem);
+  font-size: clamp(3rem, 10vw, 16rem);
   position: absolute;
-  left: 3rem;
-  bottom: 50%;
+  left: 8rem;
+  bottom: 70%;
   z-index: 1;
   color: #aebec4;
   mix-blend-mode: difference;
@@ -64,32 +66,15 @@ const TopLine = styled.div`
     color: inherit;
     mix-blend-mode: normal;
   }
-`;
 
-const HeroImg = styled.img`
-  position: absolute;
-  right: 2.5rem;
-  top: 50%;
-  transform: translateY(-50%);
-  height: calc(100vh - 5rem);
-  width: auto;
-  display: block;
-  z-index: 0;
-
-  @media (max-width: ${BREAK}) {
-    position: static;
-    transform: none;
-    height: auto;
-    width: auto;
-    max-width: calc(100vw - 5rem);
-    order: 2;
+  @media (min-width: ${BREAK_PX + 1}px) {
+    display: none;
   }
 `;
 
-// Defined before BottomGroup* so it can be used as a component selector inside them.
 const BottomLine = styled.div`
   ${titleFont}
-  font-size: clamp(3rem, 13vw, 16rem);
+  font-size: clamp(3rem, 10vw, 16rem);
   animation: ${slideUp} 600ms ease-out both;
   animation-delay: 0.5s;
 
@@ -111,12 +96,9 @@ const Caption = styled.div`
   }
 `;
 
-// Back layer: z-index 0, paints before HeroImg (same z-index, earlier in DOM)
-// so the image sits on top of it. Shows HUNT-ISAAK in blue on the cream
-// background; hidden underneath the image wherever they overlap.
 const BottomGroupBack = styled.div`
   position: absolute;
-  left: 3rem;
+  left: 23rem;
   top: 50%;
   z-index: 0;
 
@@ -133,58 +115,189 @@ const BottomGroupBack = styled.div`
       color: inherit;
     }
   }
+
+  @media (min-width: ${BREAK_PX + 1}px) {
+    display: none;
+  }
 `;
 
-// Blend layer: z-index 1, above the image. Same source color as TopLine
-// (#aebec4 + difference) so the inversion over the photo is identical to
-// ANNA ROSE. Clipped via JS to only show within the image bounds.
-// Never uses display:none — that would reset child animations on resize.
-// On mobile it stays position:absolute (out of flex flow) and the clip-path
-// keeps it fully hidden.
-const BottomGroupBlend = styled.div`
+// ── Desktop-only elements ─────────────────────────────────────────────────────
+
+const DesktopTitleRow = styled.div`
+  ${titleFont}
+  font-size: clamp(3rem, 10.5vw, 16rem);
+  animation: ${slideUp} 600ms ease-out both;
+  animation-delay: ${props => props.$delay}s;
+`;
+
+// Anna + Rose: top-left corner, 8rem from each edge.
+// mix-blend-mode: difference → brown on cream, inverted over image.
+const DesktopBrownGroup = styled.div`
   position: absolute;
-  left: 3rem;
-  top: 50%;
+  left: 10rem;
+  top: 5rem;
   z-index: 1;
   color: #aebec4;
   mix-blend-mode: difference;
+
+  @media (max-width: ${BREAK}) {
+    display: none;
+  }
 `;
 
+// Hunt + Isaak back layer: z-index 0, before image in DOM.
+// Shows blue on cream; hidden under image wherever they overlap.
+// bottom: 11rem leaves room for the caption below (8rem cushion + ~3rem caption+margin).
+const DesktopBlueGroup = styled.div`
+  position: absolute;
+  right: 8.2rem;
+  bottom: 5rem;
+  z-index: 0;
+  color: #aebec4;
+
+  @media (max-width: ${BREAK}) {
+    display: none;
+  }
+`;
+
+// Hunt + Isaak blend layer: z-index 1, after image in DOM.
+// Same source color as DesktopBrownGroup — identical inversion over the photo.
+// Clipped via JS to only show within the image bounds.
+const DesktopBlueBlendGroup = styled.div`
+  position: absolute;
+  right: 8.2rem;
+  bottom: 5rem;
+  z-index: 1;
+  color: #aebec4;
+  mix-blend-mode: difference;
+
+  @media (max-width: ${BREAK}) {
+    display: none;
+  }
+`;
+
+// Caption shown on desktop only.
+// right matches Hunt/Isaak groups; bottom set via JS so its bottom edge
+// sits exactly at the top of the HUNT row.
+// Direct brown colour (= what #aebec4 + difference blend looks like on cream).
+const DesktopCaption = styled.div`
+  position: absolute;
+  z-index: 1;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: rgb(81, 56, 46);
+  animation: ${slideUp} 1.2s ease-out both;
+  animation-delay: 1.0s;
+
+  @media (max-width: ${BREAK}) {
+    display: none;
+  }
+`;
+
+// ── Image ─────────────────────────────────────────────────────────────────────
+
+const HeroImg = styled.img`
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  transform: translate(-50%, -50%);
+  height: 55vh;
+  width: auto;
+  display: block;
+  z-index: 0;
+
+  @media (max-width: ${BREAK}) {
+    position: static;
+    transform: none;
+    height: auto;
+    width: auto;
+    max-width: calc(100vw - 5rem);
+    order: 2;
+  }
+`;
+
+// ── Component ─────────────────────────────────────────────────────────────────
+
+// Character counts used in the equal-width letter-spacing formula.
+const ROW_CHARS = [4, 4, 4, 5]; // ANNA, ROSE, HUNT, ISAAK
+
 const HomeSection = () => {
-  const topRef              = useRef(null);
-  const bottomLineRef       = useRef(null);
-  const bottomGroupRef      = useRef(null);
-  const captionRef          = useRef(null);
-  const imgRef              = useRef(null);
-  const bottomGroupBlendRef = useRef(null);
+  const topRef         = useRef(null);
+  const bottomLineRef  = useRef(null);
+  const bottomGroupRef = useRef(null);
+  const captionRef     = useRef(null);
+  const imgRef         = useRef(null);
+  const blueBlendRef   = useRef(null);
+
+  // Desktop title-row refs: anna, rose, hunt, isaak
+  const annaRef  = useRef(null);
+  const roseRef  = useRef(null);
+  const huntRef  = useRef(null);
+  const isaakRef = useRef(null);
+  const rowRefs  = [annaRef, roseRef, huntRef, isaakRef];
 
   const [mobileImgWidth,    setMobileImgWidth]    = useState(null);
   const [mobileCaptionSize, setMobileCaptionSize] = useState(null);
   const [blendClip,         setBlendClip]         = useState(null);
+  // letter-spacing override per desktop row; null = use CSS default
+  const [rowLS,             setRowLS]             = useState([null, null, null, null]);
+  // desktop caption: bottom flush with HUNT row top, left at image right edge + cushion
+  const [deskCapBottom,     setDeskCapBottom]     = useState(null);
+  const [deskCapLeft,       setDeskCapLeft]       = useState(null);
 
   const measure = useCallback(() => {
-    // ── Desktop: compute clip-path to restrict blend layer to image bounds ────
+    // ── Desktop ───────────────────────────────────────────────────────────────
     if (window.innerWidth > BREAK_PX) {
       setMobileImgWidth(null);
       setMobileCaptionSize(null);
 
+      // Blend clip-path: restrict Hunt/Isaak blend layer to image bounds.
       const img   = imgRef.current;
-      const group = bottomGroupBlendRef.current;
+      const group = blueBlendRef.current;
       if (img && group) {
         const iR = img.getBoundingClientRect();
         const gR = group.getBoundingClientRect();
-        // inset() values clip inward from each edge of the element
         const top    = Math.max(0, iR.top    - gR.top);
         const bottom = Math.max(0, gR.bottom - iR.bottom);
         const left   = Math.max(0, iR.left   - gR.left);
         const right  = Math.max(0, gR.right  - iR.right);
         setBlendClip(`inset(${top}px ${right}px ${bottom}px ${left}px)`);
       }
+
+      // Caption: bottom flush with HUNT row top, left edge at image right + cushion.
+      if (huntRef.current && imgRef.current) {
+        const hR     = huntRef.current.getBoundingClientRect();
+        const iR     = imgRef.current.getBoundingClientRect();
+        const rootPx = parseFloat(getComputedStyle(document.documentElement).fontSize);
+        setDeskCapBottom(window.innerHeight - hR.top);
+        setDeskCapLeft(iR.right + 2 * rootPx);
+      }
+
+      // Equal-width rows: clear any inline letter-spacing, measure natural
+      // widths (with the CSS 0.02em base), then compute extra spacing so all
+      // rows render at the same width as the widest one.
+      if (rowRefs.every(r => r.current)) {
+        const saved = rowRefs.map(r => r.current.style.letterSpacing);
+        rowRefs.forEach(r => { r.current.style.letterSpacing = ''; });
+        void rowRefs[0].current.offsetWidth; // force reflow
+        const widths = rowRefs.map(r => r.current.getBoundingClientRect().width);
+        rowRefs.forEach((r, i) => { r.current.style.letterSpacing = saved[i]; });
+
+        const maxW = Math.max(...widths);
+        setRowLS(widths.map((w, i) => {
+          const extra = (maxW - w) / ROW_CHARS[i];
+          return extra > 0.01 ? `calc(0.02em + ${extra}px)` : '0.02em';
+        }));
+      }
       return;
     }
 
-    // ── Mobile: size image and scale caption ──────────────────────────────────
+    // ── Mobile ────────────────────────────────────────────────────────────────
     setBlendClip(null);
+    setRowLS([null, null, null, null]);
+    setDeskCapBottom(null);
+    setDeskCapLeft(null);
 
     const top         = topRef.current;
     const bottomLine  = bottomLineRef.current;
@@ -228,29 +341,47 @@ const HomeSection = () => {
     return () => window.removeEventListener('resize', measure);
   }, [measure]);
 
-  const imgStyle     = mobileImgWidth    != null ? { width: `${mobileImgWidth}px`, height: 'auto' } : {};
-  const captionStyle = mobileCaptionSize != null ? { fontSize: `${mobileCaptionSize}px` }           : {};
-  // Hidden until clip is computed to avoid a flash of unclipped blend text
-  const blendStyle   = { clipPath: blendClip ?? 'inset(0 0 0 100%)' };
+  const imgStyle        = mobileImgWidth    != null ? { width: `${mobileImgWidth}px`, height: 'auto' } : {};
+  const captionStyle    = mobileCaptionSize != null ? { fontSize: `${mobileCaptionSize}px` }           : {};
+  const blendStyle      = { clipPath: blendClip ?? 'inset(0 0 0 100%)' };
+  const deskCapStyle    = deskCapBottom != null
+    ? { bottom: `${deskCapBottom}px`, left: `${deskCapLeft}px` }
+    : {};
+
+  const ls = (i) => rowLS[i] ? { letterSpacing: rowLS[i] } : {};
 
   return (
     <StickySection id="home">
       <Hero>
+        {/* Mobile only */}
         <TopLine ref={topRef}>ANNA ROSE</TopLine>
-
-        {/* Back layer: blue HUNT-ISAAK visible on cream, hidden under image */}
         <BottomGroupBack ref={bottomGroupRef}>
           <BottomLine ref={bottomLineRef}>HUNT{'‑'}ISAAK</BottomLine>
           <Caption ref={captionRef} style={captionStyle}>Researcher · Designer · Artist</Caption>
         </BottomGroupBack>
 
+        {/* Desktop: Hunt/Isaak back layer — behind image, shows blue on cream */}
+        <DesktopBlueGroup>
+          <DesktopTitleRow ref={rowRefs[2]} $delay={0.4} style={ls(2)}>HUNT</DesktopTitleRow>
+          <DesktopTitleRow ref={rowRefs[3]} $delay={0.6} style={ls(3)}>ISAAK</DesktopTitleRow>
+        </DesktopBlueGroup>
+
         <HeroImg ref={imgRef} src={bokehImg} alt="" style={imgStyle} onLoad={measure} />
 
-        {/* Blend layer: same inversion as ANNA ROSE, clipped to image area */}
-        <BottomGroupBlend ref={bottomGroupBlendRef} style={blendStyle}>
-          <BottomLine>HUNT{'‑'}ISAAK</BottomLine>
-          <Caption>Researcher · Designer · Artist</Caption>
-        </BottomGroupBlend>
+        {/* Desktop: Anna/Rose — above image, blend mode */}
+        <DesktopBrownGroup>
+          <DesktopTitleRow ref={rowRefs[0]} $delay={0}   style={ls(0)}>ANNA</DesktopTitleRow>
+          <DesktopTitleRow ref={rowRefs[1]} $delay={0.2} style={ls(1)}>ROSE</DesktopTitleRow>
+        </DesktopBrownGroup>
+
+        {/* Desktop: Hunt/Isaak blend layer — above image, clipped to image bounds */}
+        <DesktopBlueBlendGroup ref={blueBlendRef} style={blendStyle}>
+          <DesktopTitleRow $delay={0.4} style={ls(2)}>HUNT</DesktopTitleRow>
+          <DesktopTitleRow $delay={0.6} style={ls(3)}>ISAAK</DesktopTitleRow>
+        </DesktopBlueBlendGroup>
+
+        {/* Desktop caption — top-left corner aligned with image top-right */}
+        <DesktopCaption style={deskCapStyle}>Researcher · Designer · Artist</DesktopCaption>
       </Hero>
     </StickySection>
   );
