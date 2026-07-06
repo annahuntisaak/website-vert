@@ -135,8 +135,8 @@ const DesktopTitleRow = styled.div`
 // mix-blend-mode: difference → brown on cream, inverted over image.
 const DesktopBrownGroup = styled.div`
   position: absolute;
-  left: 17rem;
-  top: 6.5rem;
+  left: 15rem;
+  top: 6rem;
   z-index: 1;
   color: #aebec4;
   mix-blend-mode: difference;
@@ -152,7 +152,7 @@ const DesktopBrownGroup = styled.div`
 const DesktopBlueGroup = styled.div`
   position: absolute;
   right: 15.5rem;
-  bottom: 5.5rem;
+  bottom: 5rem;
   z-index: 0;
   color: #aebec4;
 
@@ -167,7 +167,7 @@ const DesktopBlueGroup = styled.div`
 const DesktopBlueBlendGroup = styled.div`
   position: absolute;
   right: 15.5rem;
-  bottom: 5.5rem;
+  bottom: 5rem;
   z-index: 1;
   color: #aebec4;
   mix-blend-mode: difference;
@@ -203,8 +203,9 @@ const HeroImg = styled.img`
   left: 50%;
   top: 52%;
   transform: translate(-50%, -50%);
-  height: 50vh;
-  width: auto;
+  width: 27vw;
+  height: auto;
+  max-height: 82vh;
   display: block;
   z-index: 0;
 
