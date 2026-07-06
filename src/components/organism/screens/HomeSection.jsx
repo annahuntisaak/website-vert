@@ -131,15 +131,28 @@ const DesktopTitleRow = styled.div`
   animation-delay: ${props => props.$delay}s;
 `;
 
-// Anna + Rose: top-left corner, 8rem from each edge.
-// mix-blend-mode: difference → brown on cream, inverted over image.
+// Anna + Rose back layer: z-index 0, before image in DOM.
+// Shows dark brown on cream; hidden under image wherever they overlap.
 const DesktopBrownGroup = styled.div`
   position: absolute;
   left: 16.5vw;
   top: 8vh;
+  z-index: 0;
+  color: rgb(81, 56, 46);
+
+  @media (max-width: ${BREAK}) {
+    display: none;
+  }
+`;
+
+// Anna + Rose top layer: z-index 1, after image in DOM.
+// Clipped via JS to only show within the image bounds — off-white over the photo.
+const DesktopBrownTopGroup = styled.div`
+  position: absolute;
+  left: 16.5vw;
+  top: 8vh;
   z-index: 1;
-  color: #b9c8ce;
-  mix-blend-mode: difference;
+  color: #fff6f2;
 
   @media (max-width: ${BREAK}) {
     display: none;
@@ -160,16 +173,14 @@ const DesktopBlueGroup = styled.div`
   }
 `;
 
-// Hunt + Isaak blend layer: z-index 1, after image in DOM.
-// Same source color as DesktopBrownGroup — identical inversion over the photo.
-// Clipped via JS to only show within the image bounds.
+// Hunt + Isaak top layer: z-index 1, after image in DOM.
+// Clipped via JS to only show within the image bounds — off-white over the photo.
 const DesktopBlueBlendGroup = styled.div`
   position: absolute;
   right: 15vw;
   bottom: 6vh;
   z-index: 1;
-  color: #87989f;
-  mix-blend-mode: difference;
+  color: #fff6f2;
 
   @media (max-width: ${BREAK}) {
     display: none;
@@ -177,9 +188,7 @@ const DesktopBlueBlendGroup = styled.div`
 `;
 
 // Caption shown on desktop only.
-// right matches Hunt/Isaak groups; bottom set via JS so its bottom edge
-// sits exactly at the top of the HUNT row.
-// Direct brown colour (= what #aebec4 + difference blend looks like on cream).
+// bottom set via JS so its bottom edge sits at the top of the HUNT row.
 const DesktopCaption = styled.div`
   position: absolute;
   z-index: 1;
@@ -230,6 +239,7 @@ const HomeSection = () => {
   const captionRef     = useRef(null);
   const imgRef         = useRef(null);
   const blueBlendRef   = useRef(null);
+  const brownTopRef    = useRef(null);
 
   // Desktop title-row refs: anna, rose, hunt, isaak
   const annaRef  = useRef(null);
@@ -241,6 +251,7 @@ const HomeSection = () => {
   const [mobileImgWidth,    setMobileImgWidth]    = useState(null);
   const [mobileCaptionSize, setMobileCaptionSize] = useState(null);
   const [blendClip,         setBlendClip]         = useState(null);
+  const [brownTopClip,      setBrownTopClip]      = useState(null);
   // letter-spacing override per desktop row; null = use CSS default
   const [rowLS,             setRowLS]             = useState([null, null, null, null]);
   // desktop caption: bottom flush with HUNT row top, left at image right edge + cushion
@@ -253,17 +264,23 @@ const HomeSection = () => {
       setMobileImgWidth(null);
       setMobileCaptionSize(null);
 
-      // Blend clip-path: restrict Hunt/Isaak blend layer to image bounds.
-      const img   = imgRef.current;
-      const group = blueBlendRef.current;
-      if (img && group) {
+      const img = imgRef.current;
+
+      // Clip Hunt/Isaak blend layer and Anna/Rose top layer to image bounds.
+      if (img) {
         const iR = img.getBoundingClientRect();
-        const gR = group.getBoundingClientRect();
-        const top    = Math.max(0, iR.top    - gR.top);
-        const bottom = Math.max(0, gR.bottom - iR.bottom);
-        const left   = Math.max(0, iR.left   - gR.left);
-        const right  = Math.max(0, gR.right  - iR.right);
-        setBlendClip(`inset(${top}px ${right}px ${bottom}px ${left}px)`);
+
+        const blueGroup = blueBlendRef.current;
+        if (blueGroup) {
+          const gR = blueGroup.getBoundingClientRect();
+          setBlendClip(`inset(${Math.max(0, iR.top - gR.top)}px ${Math.max(0, gR.right - iR.right)}px ${Math.max(0, gR.bottom - iR.bottom)}px ${Math.max(0, iR.left - gR.left)}px)`);
+        }
+
+        const brownTop = brownTopRef.current;
+        if (brownTop) {
+          const gR = brownTop.getBoundingClientRect();
+          setBrownTopClip(`inset(${Math.max(0, iR.top - gR.top)}px ${Math.max(0, gR.right - iR.right)}px ${Math.max(0, gR.bottom - iR.bottom)}px ${Math.max(0, iR.left - gR.left)}px)`);
+        }
       }
 
       // Caption: bottom flush with HUNT row top, left edge at image right + cushion.
@@ -296,6 +313,7 @@ const HomeSection = () => {
 
     // ── Mobile ────────────────────────────────────────────────────────────────
     setBlendClip(null);
+    setBrownTopClip(null);
     setRowLS([null, null, null, null]);
     setDeskCapBottom(null);
     setDeskCapLeft(null);
@@ -344,7 +362,8 @@ const HomeSection = () => {
 
   const imgStyle        = mobileImgWidth    != null ? { width: `${mobileImgWidth}px`, height: 'auto' } : {};
   const captionStyle    = mobileCaptionSize != null ? { fontSize: `${mobileCaptionSize}px` }           : {};
-  const blendStyle      = { clipPath: blendClip ?? 'inset(0 0 0 100%)' };
+  const blendStyle      = { clipPath: blendClip    ?? 'inset(0 0 0 100%)' };
+  const brownTopStyle   = { clipPath: brownTopClip ?? 'inset(0 0 0 100%)' };
   const deskCapStyle    = deskCapBottom != null
     ? { bottom: `${deskCapBottom}px`, left: `${deskCapLeft}px` }
     : {};
@@ -367,13 +386,13 @@ const HomeSection = () => {
           <DesktopTitleRow ref={rowRefs[3]} $delay={0.6} style={ls(3)}>ISAAK</DesktopTitleRow>
         </DesktopBlueGroup>
 
-        <HeroImg ref={imgRef} src={bokehImg} alt="" fetchpriority="high" decoding="async" style={imgStyle} onLoad={measure} />
-
-        {/* Desktop: Anna/Rose — above image, blend mode */}
+        {/* Desktop: Anna/Rose back layer — behind image, shows dark brown on cream */}
         <DesktopBrownGroup>
           <DesktopTitleRow ref={rowRefs[0]} $delay={0}   style={ls(0)}>ANNA</DesktopTitleRow>
           <DesktopTitleRow ref={rowRefs[1]} $delay={0.2} style={ls(1)}>ROSE</DesktopTitleRow>
         </DesktopBrownGroup>
+
+        <HeroImg ref={imgRef} src={bokehImg} alt="" fetchpriority="high" decoding="async" style={imgStyle} onLoad={measure} />
 
         {/* Desktop: Hunt/Isaak blend layer — above image, clipped to image bounds */}
         <DesktopBlueBlendGroup ref={blueBlendRef} style={blendStyle}>
@@ -381,7 +400,13 @@ const HomeSection = () => {
           <DesktopTitleRow $delay={0.6} style={ls(3)}>ISAAK</DesktopTitleRow>
         </DesktopBlueBlendGroup>
 
-        {/* Desktop caption — top-left corner aligned with image top-right */}
+        {/* Desktop: Anna/Rose top layer — above image, clipped to image bounds, off-white */}
+        <DesktopBrownTopGroup ref={brownTopRef} style={brownTopStyle}>
+          <DesktopTitleRow $delay={0}   style={ls(0)}>ANNA</DesktopTitleRow>
+          <DesktopTitleRow $delay={0.2} style={ls(1)}>ROSE</DesktopTitleRow>
+        </DesktopBrownTopGroup>
+
+        {/* Desktop caption */}
         <DesktopCaption style={deskCapStyle}>Researcher · Designer · Artist</DesktopCaption>
       </Hero>
     </StickySection>
