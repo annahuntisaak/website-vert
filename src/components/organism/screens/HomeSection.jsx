@@ -125,7 +125,8 @@ const BottomGroupBack = styled.div`
 
 const DesktopTitleRow = styled.div`
   ${titleFont}
-  font-size: clamp(3rem, 10.5vw, 16rem);
+  font-size: clamp(3rem, 8vw, 16rem);
+  line-height: 0.9;
   animation: ${slideUp} 600ms ease-out both;
   animation-delay: ${props => props.$delay}s;
 `;
@@ -134,8 +135,8 @@ const DesktopTitleRow = styled.div`
 // mix-blend-mode: difference → brown on cream, inverted over image.
 const DesktopBrownGroup = styled.div`
   position: absolute;
-  left: 10rem;
-  top: 5rem;
+  left: 17rem;
+  top: 6.5rem;
   z-index: 1;
   color: #aebec4;
   mix-blend-mode: difference;
@@ -150,8 +151,8 @@ const DesktopBrownGroup = styled.div`
 // bottom: 11rem leaves room for the caption below (8rem cushion + ~3rem caption+margin).
 const DesktopBlueGroup = styled.div`
   position: absolute;
-  right: 8.2rem;
-  bottom: 5rem;
+  right: 15.5rem;
+  bottom: 5.5rem;
   z-index: 0;
   color: #aebec4;
 
@@ -165,8 +166,8 @@ const DesktopBlueGroup = styled.div`
 // Clipped via JS to only show within the image bounds.
 const DesktopBlueBlendGroup = styled.div`
   position: absolute;
-  right: 8.2rem;
-  bottom: 5rem;
+  right: 15.5rem;
+  bottom: 5.5rem;
   z-index: 1;
   color: #aebec4;
   mix-blend-mode: difference;
@@ -202,7 +203,7 @@ const HeroImg = styled.img`
   left: 50%;
   top: 52%;
   transform: translate(-50%, -50%);
-  height: 55vh;
+  height: 50vh;
   width: auto;
   display: block;
   z-index: 0;
@@ -270,7 +271,7 @@ const HomeSection = () => {
         const hR     = huntRef.current.getBoundingClientRect();
         const iR     = imgRef.current.getBoundingClientRect();
         const rootPx = parseFloat(getComputedStyle(document.documentElement).fontSize);
-        setDeskCapBottom(window.innerHeight - hR.top);
+        setDeskCapBottom(window.innerHeight - hR.top + 0.5 * rootPx);
         setDeskCapLeft(iR.right + 2 * rootPx);
       }
 
