@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import les from '../../assets/les.webp';
 import line from '../../assets/line.webp';
@@ -33,6 +33,9 @@ const Row = styled.div`
   width: 100%;
   max-width: 700px;
   margin: 0 auto;
+  opacity: ${p => p.$visible ? 1 : 0};
+  transform: ${p => p.$visible ? 'translateY(0)' : 'translateY(14px)'};
+  transition: opacity 1.2s ease, transform 1.2s ease;
 
   @media (max-width: 700px) {
     flex-direction: column;
@@ -187,6 +190,23 @@ const TraditionalArtBlock = () => {
     Object.fromEntries(allImages.map((p) => [p.src, DEFAULT_RATIO]))
   );
   const [activeIndex, setActiveIndex] = useState(null);
+  const [visibleRows, setVisibleRows] = useState(() => Array(rows.length).fill(false));
+  const rowRefs = useRef([]);
+
+  useEffect(() => {
+    const observers = rowRefs.current.map((el, i) => {
+      if (!el) return null;
+      const obs = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) {
+          setVisibleRows(prev => prev.map((v, j) => j === i ? true : v));
+          obs.disconnect();
+        }
+      }, { threshold: 0, rootMargin: '0px 0px -60px 0px' });
+      obs.observe(el);
+      return obs;
+    });
+    return () => observers.forEach(o => o?.disconnect());
+  }, []);
 
   const handleLoad = useCallback((e, src) => {
     const { naturalWidth, naturalHeight } = e.target;
@@ -223,7 +243,7 @@ const TraditionalArtBlock = () => {
           const total = row.reduce((sum, p) => sum + ratios[p.src], 0);
           const scale = total < 1 ? 1 / total : 1;
           return (
-            <Row key={rowIndex}>
+            <Row key={rowIndex} $visible={visibleRows[rowIndex]} ref={el => { rowRefs.current[rowIndex] = el; }}>
               {row.map((piece) => (
                 <Cell
                   key={piece.src}
