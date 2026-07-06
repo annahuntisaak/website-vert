@@ -17,6 +17,7 @@ const fieldStyle = `
   border-bottom: 1px solid rgba(255, 246, 242, 0.4);
   color: #fff6f2;
   font-family: var(--font-mono);
+  font-weight: 300;
   font-size: 13px;
   letter-spacing: 0.08em;
   padding: 0.5rem 0;
@@ -52,8 +53,14 @@ const Submit = styled.button`
   padding: 0.75rem 1.5rem;
   cursor: pointer;
 
+  transition: background 0.2s ease, transform 0.1s ease;
+
   &:hover {
     background: rgba(255, 246, 242, 0.07);
+  }
+
+  &:active {
+    transform: scale(0.95);
   }
 `;
 

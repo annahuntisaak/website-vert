@@ -37,8 +37,14 @@ const ResumeButton = styled.button`
   padding: 0.75rem 1.5rem;
   cursor: pointer;
 
+  transition: background 0.2s ease, transform 0.1s ease;
+
   &:hover {
     background: rgba(81, 56, 46, 0.18);
+  }
+
+  &:active {
+    transform: scale(0.95);
   }
 
   @media (max-width: 700px) {
