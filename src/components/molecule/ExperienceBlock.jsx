@@ -425,7 +425,7 @@ const ExperienceBlock = () => {
     const BODY_DELAY = 500;
     const IMAGE_DELAY = BODY_DELAY + 400;
     // How long after a primary entry's header before its continuation entry starts.
-    const CONTINUATION_DELAY = BODY_DELAY + 1200;
+    const CONTINUATION_DELAY = BODY_DELAY + 700;
 
     // Entries with showDot===false are continuations — skip the observer and
     // let their preceding entry trigger them sequentially instead.
