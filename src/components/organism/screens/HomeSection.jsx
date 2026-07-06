@@ -1,6 +1,6 @@
 import React, { useRef, useLayoutEffect, useState, useCallback } from 'react';
 import styled, { keyframes } from 'styled-components';
-import bokehImg from '../../../assets/bokeh.jpg';
+import bokehImg from '../../../assets/bokeh.webp';
 
 const slideUp = keyframes`
   from { opacity: 0; transform: translateY(12px); }
