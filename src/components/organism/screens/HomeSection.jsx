@@ -54,7 +54,7 @@ const TopLine = styled.div`
   left: 8rem;
   bottom: 70%;
   z-index: 1;
-  color: #aebec4;
+  color: #87989f;
   mix-blend-mode: difference;
   animation: ${slideUp} 600ms ease-out both;
   animation-delay: 0s;
@@ -103,7 +103,7 @@ const BottomGroupBack = styled.div`
   z-index: 0;
 
   ${BottomLine} {
-    color: #aebec4;
+    color: #87989f;
   }
 
   @media (max-width: ${BREAK}) {
@@ -138,7 +138,7 @@ const DesktopBrownGroup = styled.div`
   left: 16.5vw;
   top: 8vh;
   z-index: 1;
-  color: #aebec4;
+  color: #b9c8ce;
   mix-blend-mode: difference;
 
   @media (max-width: ${BREAK}) {
@@ -153,7 +153,7 @@ const DesktopBlueGroup = styled.div`
   right: 15vw;
   bottom: 6vh;
   z-index: 0;
-  color: #aebec4;
+  color: #87989f;
 
   @media (max-width: ${BREAK}) {
     display: none;
@@ -168,7 +168,7 @@ const DesktopBlueBlendGroup = styled.div`
   right: 15vw;
   bottom: 6vh;
   z-index: 1;
-  color: #aebec4;
+  color: #87989f;
   mix-blend-mode: difference;
 
   @media (max-width: ${BREAK}) {
