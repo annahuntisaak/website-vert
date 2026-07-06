@@ -367,7 +367,7 @@ const HomeSection = () => {
           <DesktopTitleRow ref={rowRefs[3]} $delay={0.6} style={ls(3)}>ISAAK</DesktopTitleRow>
         </DesktopBlueGroup>
 
-        <HeroImg ref={imgRef} src={bokehImg} alt="" style={imgStyle} onLoad={measure} />
+        <HeroImg ref={imgRef} src={bokehImg} alt="" fetchpriority="high" decoding="async" style={imgStyle} onLoad={measure} />
 
         {/* Desktop: Anna/Rose — above image, blend mode */}
         <DesktopBrownGroup>
