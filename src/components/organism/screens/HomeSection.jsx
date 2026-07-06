@@ -135,8 +135,8 @@ const DesktopTitleRow = styled.div`
 // mix-blend-mode: difference → brown on cream, inverted over image.
 const DesktopBrownGroup = styled.div`
   position: absolute;
-  left: 15rem;
-  top: 6rem;
+  left: 16.5vw;
+  top: 8vh;
   z-index: 1;
   color: #aebec4;
   mix-blend-mode: difference;
@@ -148,11 +148,10 @@ const DesktopBrownGroup = styled.div`
 
 // Hunt + Isaak back layer: z-index 0, before image in DOM.
 // Shows blue on cream; hidden under image wherever they overlap.
-// bottom: 11rem leaves room for the caption below (8rem cushion + ~3rem caption+margin).
 const DesktopBlueGroup = styled.div`
   position: absolute;
-  right: 15.5rem;
-  bottom: 5rem;
+  right: 15vw;
+  bottom: 6vh;
   z-index: 0;
   color: #aebec4;
 
@@ -166,8 +165,8 @@ const DesktopBlueGroup = styled.div`
 // Clipped via JS to only show within the image bounds.
 const DesktopBlueBlendGroup = styled.div`
   position: absolute;
-  right: 15.5rem;
-  bottom: 5rem;
+  right: 15vw;
+  bottom: 6vh;
   z-index: 1;
   color: #aebec4;
   mix-blend-mode: difference;
