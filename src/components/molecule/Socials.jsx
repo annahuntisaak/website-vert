@@ -22,14 +22,10 @@ const IconRow = styled.div`
     color: #fff6f2;
     font-size: 2.5rem;
     line-height: 1;
-    transition: color 0.2s ease, transform 0.1s ease;
+    transition: color 0.2s ease;
 
     &:hover {
       color: rgba(255, 246, 242, 0.4);
-    }
-
-    &:active {
-      transform: scale(0.88);
     }
   }
 `;
